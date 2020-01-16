@@ -52,7 +52,7 @@
 ![Alt text](lifrary/src/main/resources/static/portfolioStatic/images/implement.PNG)
 
 #
-* 개발 과정
+* 개발 과정 : 
 &ensp;&ensp; 시스템구조도작성, 기능정의, 프로세스정의 및 Data사전, 상세자료입력, 테이블스키마, ERD작성, Query문장테스트, UI설계, 네이밍규칙, 구현, 배포
 
 #
