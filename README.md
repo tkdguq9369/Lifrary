@@ -65,7 +65,7 @@
 
 > 3. 사서관리(사서관리, 사서이용자관리)  
 &ensp;&ensp; 도서관 관리자 페이지 : 사서-사서정보 (수정,삭제),  
-&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;관리자 - 사서권한 (등록,수정,삭제)  
+&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;관리자 - 사서권한 (등록,수정,삭제)  
 
 > 4. 포인트관리  
 &ensp;&ensp; 도서관 페이지 : 포인트 이력, 포인트 사용  
