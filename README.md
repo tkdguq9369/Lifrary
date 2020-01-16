@@ -1,6 +1,7 @@
 # Lifrary
 
 팀프로젝트 github주소  : https://github.com/shohye/Lifrary  
+프로젝트 주소 :  http://tkdguq93.cafe24.com
 <hr/>
 
 
