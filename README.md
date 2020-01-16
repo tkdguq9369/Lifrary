@@ -1,37 +1,39 @@
 # Lifrary
 
 팀프로젝트 github주소  :[팀작업 github바로가기](https://github.com/shohye/Lifrary)  
-프로젝트 주소 :  [프로젝트 바로가기](http://tkdguq93.cafe24.com)
+프로젝트 주소 :  [프로젝트 바로가기](http://tkdguq93.cafe24.com)  
 <hr/>
 
 
 * 프로젝트명  
  전국민 독서량 증진과 도서관 방문율을 향상시키는 **도서관통합관리시스템( Lifrary )**  
+   
+     
  ※ Lifrary란?  
- - Life + library로, 생활속의 도서관을 의미하는 합성어입니다.
+ ### &ensp;&ensp;&ensp;&ensp;Life + library로, 생활속의 도서관을 의미하는 합성어입니다.
 #
 * 개발 기간  
 > 2019-10-24 ~ 2019-11-01  
-&ensp;&ensp;프로젝트 주제 선정 및 사전조사
+&ensp;&ensp; 프로젝트 주제 선정 및 사전조사
 
 > 2019-11-02 ~ 2019-12-01  
-&ensp;&ensp;프로젝트 설계(기능정의, 테이블 구상)  
-&ensp;&ensp;설계자료 취합, 수정 및 보완  
-&ensp;&ensp;ERD 작업 및 메서드, 패키지 정리
+&ensp;&ensp; 프로젝트 설계(기능정의, 테이블 구상)  
+&ensp;&ensp; 설계자료 취합, 수정 및 보완  
+&ensp;&ensp; ERD 작업 및 메서드, 패키지 정리
 
 > 2019-12-02 ~ 2019-12-03  
-&ensp;&ensp;서버 설정  
-&ensp;&ensp;개발환경 설정  
-&ensp;&ensp;Hosting 설정
+&ensp;&ensp; 서버 설정  
+&ensp;&ensp; 개발환경 설정  
+&ensp;&ensp; Hosting 설정
 
 > 2019-12-03 ~ 2020-01-09  
-&ensp;&ensp;기능 구현(개인 분담 프로그래밍)
+&ensp;&ensp; 기능 구현(개인 분담 프로그래밍)
 
 > 2019-12-30 ~ 2020-01-09  
-&ensp;&ensp;테스트, 오류 수정 및 보완
+&ensp;&ensp; 테스트, 오류 수정 및 보완
 
 > 2020-01-10 ~ 2020-01-13  
-&ensp;&ensp;결과 보고서 작성
+&ensp;&ensp; 결과 보고서 작성
 
 #
 *  개발 목표  
@@ -50,7 +52,7 @@
 ![Alt text](lifrary/src/main/resources/static/portfolioStatic/images/implement.PNG)
 
 #
-* 개발 과정
+* 개발 과정 : 
 &ensp;&ensp; 시스템구조도작성, 기능정의, 프로세스정의 및 Data사전, 상세자료입력, 테이블스키마, ERD작성, Query문장테스트, UI설계, 네이밍규칙, 구현, 배포
 
 #
