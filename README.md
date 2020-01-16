@@ -44,5 +44,6 @@
 &ensp;&ensp;3. 다양한 문화행사, 강좌 제공 및 편리한 공공시설 예약시스템으로 이용자가 증가하는것을 기대할 수 있다.  
 
 #
-* 내가 맡은 구현 기능  
+* 내가 맡은 구현 기능
+#
 ![Alt text](lifrary/src/main/resources/static/portfolioStatic/images/implement.PNG)
