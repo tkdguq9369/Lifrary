@@ -1,6 +1,6 @@
 # Lifrary
 
-팀프로젝트 github주소  : [팀 git주소 바로가기](https://github.com/shohye/Lifrary){: target="_blank"}  
+팀프로젝트 github주소  : <a href = "https://github.com/shohye/Lifrary" target="_blank"><span>https://github.com/shohye/Lifrary</span></a>
 프로젝트 주소 :  [프로젝트 ](http://tkdguq93.cafe24.com){: target="_blank"}
 <hr/>
 
