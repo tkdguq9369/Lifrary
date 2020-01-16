@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/admin/adminDefault}"
+	  class="default-style">
+	  
+	  <th:block layout:fragment="adminHeadAdd">
+	  <link rel="stylesheet" th:href="@{/adminStatic/vendor/css/pages/users.css}">
+ 	  </th:block>
+  <!-- headAdd(Libs&page) -->
+  	<th:block layout:fragment="adminTitle">
+		<title>공공 시설 상세보기</title>
+	</th:block>
+ 		 <!-- teamScript(각페이지에서 각자 구현할 자바스크립트)  -->
+  <th:block layout:fragment="teamHeadScript">
+	  <script th:inline="javascript">
+			$(document).ready(function(){
+				var fCode = [[${facility.fCode}]];
+				$('#fDeleteBtn').click(function(){
+					var deleteConfirm = confirm('정말로 삭제하시겠습니까?');
+					
+					if(deleteConfirm == true){
+						location.href = '/admin/facilityDelete?fCode='+fCode;
+						alert('삭제 완료')
+					}else{
+						location.reload();
+					}
+				})
+				
+				
+				
+				/* Detail페이지에 테이블 뿌려주기 */
+				var fRow = [[${facility.fRow}]];
+				var fCol = [[${facility.fCol}]];
+				var fKinds = [[${facility.fKinds}]];
+				var tableDiv = $('#tableDiv');
+				var contents = '';
+				var fRowfCol = fRow * fCol;							      // 상세보기 페이지에서 들어왔을때 자리이 있는지없는지 체크하기위한 변수. 
+																		  // 0이면 자리 선택을 안하는 스터디룸, 강연실
+																		  // 0이 아니면 자리을 선택하는 열람실, 사물함
+																		  
+				if(fRowfCol == 0) { 									  // fRowfCol이 0인경우 = 자리선택을 안해서 자동으로 DB에 0이 들어간 경우.
+					if(fKinds == '스터디룸'){
+						contents += '<img alt="이미지를 표시할 수 없습니다." src="/adminStatic/img/avatars/studyroom.jpg">'
+					} else if(fKinds == '강연실'){
+						contents += '<img alt="이미지를 표시할 수 없습니다." src="/adminStatic/img/avatars/lecture.jpg">'
+					}
+					tableDiv.html(contents);
+					//이런식으로 이미지 출력해주면 될거같습니다.
+				} else{ 												  // 자리이 있는경우는 0이 아닐것이므로, 열람실  / 사물함
+					var fSeat = [[${facility.fSeatOrImg}]];   			  // 자리이 있는경우 DB에 저장되어있는 문자열을 가져옵니다.( ex> 1-1,2-2,3-3 )
+					var seatArray = fSeat.split(',');					  // , 를 기준으로 배열에 박아넣습니다.( ex> ['1-1','2-2','3-3'] )
+					
+					/* 테이블 그려주기 */
+						contents += '<table border="2">';
+					for(var i = 1; i <= fCol; i++){
+						contents += '<tr>';
+						for(var j = 1; j <= fRow; j++){
+							contents += '<td class="tdClass" style="color:black; text-align: center; font-size:12px;  width: 40px; height: 35px;"'+ 
+							'seat="'+i+'-'+j+'" status="true">'+i+'-'+j+'</td>';
+						}
+						contents += '</tr>';
+					}
+					contents += '</table>';
+					tableDiv.html(contents); // 만들어진 테이블을 뿌려줌
+					var tdClass = $('.tdClass'); // 테이블이 만들어진 후 변수에 대입해줌.
+					
+						
+					/* 뿌려준 테이블에 가져온 배열(선택된 자리)색칠해주기 */
+					 for(var i = 0; i < tdClass.length; i++){
+						if(seatArray.indexOf(tdClass.eq(i).attr('seat')) >= 0){ // 배열에서 tdClass의 seat값과 같은 게있는가.
+						//console.log(tdClass.eq(i).attr('seat') + ' <= 배열안에 tdClass의 seat와 같은것');
+						tdClass.eq(i).css("background-color",'black');
+						tdClass.eq(i).css("color",'white');
+						tdClass.eq(i).text(seatArray.indexOf(tdClass.eq(i).attr('seat'))+1);
+						}else{
+							tdClass.eq(i).css("color",'white');					// seat값과 다르면 글자색을 흰색으로 변경
+							tdClass.eq(i).text('');								// 불필요한 칸의 text를 공백으로 만들어준다.
+						}
+					} 
+				}
+			})
+			
+	  </script>
+  	
+  </th:block>
+  <!-- / teamScript(각페이지에서 각자 구현할 자바스크립트)  -->
+  <!-- Content -->
+         <th:block layout:fragment="adminContents" th:with="f=${facility}">
+         	<div class="layout-content">
+         		<div class="container-fluid flex-grow-1 container-p-y" >
+        
+         			<div class="media align-items-center py-3 mb-3">
+		              <div class="media-body ml-4" > 
+		                <h4 class="font-weight-bold mb-0" th:text="${f.fName}"></h4>
+		                <div class="text-muted mb-2">관리자:
+		                	<span th:text="${f.uId}"></span>
+		                </div>
+		              </div>
+		            </div>
+		            
+		            <div class="card mb-4">
+		              <div class="card-body">
+		                <table class="table user-view-table m-0" > <!-- th:with="m = ${#}" -->
+		                  <tbody>
+		                     
+		                    <tr>
+		                      <td>시설명:</td><td th:text="${f.fName}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>시설 종류:</td><td th:text="${f.fKinds}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>시설 위치:</td><td th:text="${f.fLocation}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>수용 인원:</td><td th:text="${f.fAccommodate}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>이용 성별:</td><td th:text="${f.fGender}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>최대 사용시간:</td><td th:text="${f.fTerm}"></td>
+		                    </tr>		                    
+		                    <tr>
+		                      <td>등록일:</td><td th:text="${f.fDate}"></td>
+		                    </tr>
+		                   
+		                  </tbody>
+		                </table>
+				  		     배치도 : <div id="tableDiv" style="margin-left: 80px;"></div>
+		               <br>
+		 				  
+			              <table>
+			                  <tr>
+			                  	<td>
+					   				<a th:href="@{/admin/facilityUpdate(fCode = ${f.fCode})}" style="color: white"> 
+							            <button type="button" class="btn btn-primary d-block" style="margin-top: 10px;">
+						            			<span class="ion ion-md-build"> 수정하기</span>
+										</button>
+					  				</a>
+				  			 	</td>
+					  			 	<td>
+						 				 <a style="color: white"> 
+								            <button id= "fDeleteBtn" type="button" class="btn btn-danger d-block" style="margin-top: 10px;">
+							            			<span class="ion ion-md-cut"> 삭제하기</span>
+											</button>
+						  				 </a>
+									</td>
+									
+				  			  </tr>
+				  		  </table>
+				  		  
+		              </div>
+		              
+		             
+		            </div>
+			         		
+         		</div>
+         		
+         	</div>
+
+          </th:block>
+          
+          <!-- / Content -->
+         
+          <!-- script -->
+          <th:block layout:fragment="pageScript">
+
+		  <!-- addLibs -->
+		  <script th:src="@{/adminStatic/vendor/libs/chartjs/chartjs.js}"></script>
+		
+		  <!-- addDemo -->
+		  <script th:src="@{/adminStatic/js/dashboards_dashboard-1.js}"></script>
+		  </th:block>
+  		  <!-- /script -->
+  		  
+  		  
+          
+</html>

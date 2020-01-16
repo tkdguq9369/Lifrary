@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/library/libraryDefault}">
+ <th:block layout:fragment="libraryTitle">
+	<title>나의 대출도서 목록</title>
+ </th:block>
+    
+ <th:block layout:fragment="customScript">
+ 	<script type="text/javascript">
+ 	 $(document).ready(function(){
+ 		 
+ 		$('#searchBtn').click(function(){
+ 			var biName =$('[name="biName"]').val();
+ 			var skDate =$('[name="skDate"]').val();
+ 			var svDate =$('[name="svDate"]').val();
+
+ 			if(biName == '' || biName == null){
+ 				alert('도서명을 입력해주세요');
+ 			}else{
+ 				$('#searchForm').submit();
+ 			}
+ 		});
+ 		 
+ 	 });
+ 	</script>
+ 	<style>
+		.myLend td {
+			vertical-align: middle !important;
+		}
+		.myLend img {
+			width: 40px; 
+			height: auto;
+		}
+		a {
+			cursor: pointer;
+		}
+ 	</style>
+ 	</th:block>        
+    <th:block layout:fragment="customContents">
+       <section class="page-banner services-banner">
+            <div class="container">
+                <div class="banner-header">
+                    <h2>MY BOOKS</h2>
+                    <span class="underline center"></span>
+                    <p class="lead">나의 대출 도서를 한눈에 확인해보세요</p>
+                </div>
+                <div class="breadcrumb">
+                    <ul>
+                        <li><a>마이페이지</a></li>
+                        <li>도서 대출 현황</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <div id="content" class="site-content">
+            <div id="primary" class="content-area">
+                <main id="main" class="site-main">
+                    <div class="books-media-list">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Start: Search Section -->
+                                <section class="search-filters">
+                                    <div class="container">
+                                        <div class="filter-box">
+                                            <h3>나의 대출 도서 검색</h3>
+                                            <form th:action="@{/lifrary/myLendList}" id="searchForm">
+	                                            <div class="col-md-4 col-sm-6">
+	                                                <div class="form-group">
+	                                                	<label for="keywords">도서명</label>
+	                                                    <input class="form-control" type="text" name="biName">
+	                                                </div>
+	                                            </div>
+	                                            <div class="col-md-3 col-sm-6">
+	                                            	<label for="keywords">기간조건</label>
+	                                                <select name="skDate" class="form-control">
+	                                                    <option value="blLendDate">대출일</option>
+	                                                    <option value="blScheduleDate">반납예정일</option>
+	                                                    <option value="blReturnDate">반납일</option>
+	                                                </select>
+	                                            </div>
+	                                            <div class="col-md-3 col-sm-6">
+	                                            	<label for="keywords">기간선택</label>
+	                                                <select name="svDate" class="form-control">
+	                                                    <option value="">전체기간</option>
+	                                                    <option value="week">최근 1주일</option>
+	                                                    <option value="month">최근 1개월</option>
+	                                                    <option value="6month">최근 6개월</option>
+	                                                    <option value="year">최근 1년</option>
+	                                                </select>
+	                                            </div>
+	                                            <div class="col-md-2 col-sm-6">
+	                                                <div class="form-group">
+	                                                	<label for="keywords">&nbsp</label>
+	                                                    <button type="button" id="searchBtn" class="form-control btn btn-primary" >검색</button>
+	                                                </div>
+	                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!-- End: Search Section -->
+                            </div>
+                            <div class="row myLend">
+                                <div class="col-md-9 col-md-push-3" style="padding: 20px;">
+                                   <h3>나의 대출 도서</h3> <br>
+                                   <table class="table table-striped table-bordered">                         
+					                  <thead>
+					                    <tr>
+					                      <th>번호</th>
+					                      <th>도서명</th>
+					                      <th>대출일</th>
+					                      <th>반납예정일</th>
+					                      <th>반납일</th>
+					                      <th>연장</th>
+					                      <th>연체일</th>
+					                    </tr>
+					                  </thead>
+							          <tbody>
+							            <th:block th:if="${#lists.size(myLendList)} > 0">
+									  	<tr th:each="Ml,C : ${myLendList}">	
+									      <td th:text="${C.count}">번호</td>
+									      <td>
+							         	 	 <div >
+							         	 		<img th:src="${Ml.biImg}" alt="이미지준비중/">
+							         	 		<a th:href="@{/lifrary/bookDetail(bsCode=${Ml.bsCode})}" style="cursor: pointer;">
+							         	 			<span  th:text="${#strings.abbreviate(Ml.biName,25)}"></span>
+							         	 		</a>
+							         	 	 </div>
+							         	  </td>
+									      <td th:text="${Ml.blLendDate}">대출일</td>
+									      <td th:text="${Ml.blScheduleDate}">반납예정일</td>
+									      <td th:text="${Ml.blReturnDate}">반납일</td>
+									      <td th:if = "${Ml.blExtensionDate != null || Ml.blReturnDate != null}">
+							            	<span class="badge">연장불가</span>
+							             </td> 
+							             <td class="align-middle text-center" th:unless = "${Ml.blExtensionDate != null || Ml.blReturnDate != null}">
+							            	 <a th:href="@{/lifrary/extensionUpdate(blCode=${Ml.blCode})}">
+							            		<span class="badge" style="background-color:#02BC77;">연장하기</span>
+							            	 </a>
+							             </td>
+								        <td th:text="${Ml.blOverdueDays}">연체일</td>
+								        </tr>
+								        </th:block>
+								        <th:block th:unless="${#lists.size(myLendList)} > 0">
+								             <tr>
+								            	 <td colspan="7" style="height: 150px; text-align: center;">대출도서가 없습니다</td>
+								             </tr>	
+							             </th:block>
+									  </tbody> 
+						            </table>
+                                    <nav class="navigation pagination text-center">
+                                        <h2 class="screen-reader-text">Posts navigation</h2>
+                                        <div class="nav-links">   
+			                         	 <span th:if="${currentPage > 1}">
+			                             	<a class="prev page-numbers" th:href="@{/lifrary/myLendList(biName=${param.biName},skDate=${param.skDate},svDate=${param.svDate}, currentPage=(${currentPage}-1))}">
+			                                     <i class="fa fa-long-arrow-left"></i> 이전
+			                                 </a>
+			                             </span>          
+				                         <th:block th:each="num : ${#numbers.sequence(startPageNum,lastPageNum)}">
+									        <span th:if="${currentPage == num}" th:text="${num}" class="page-numbers current"></span>
+									        <span th:unless="${currentPage == num}">
+									        	<a th:text="${num}" class="page-numbers" th:href="@{/lifrary/myLendList(biName=${param.biName},skDate=${param.skDate},svDate=${param.svDate}, currentPage=${num})}">
+				                                </a>
+									    	</span>
+									     </th:block>
+			                             <span th:if="${currentPage != lastPage}"> 
+			                             	<a class="next page-numbers" th:href="@{/lifrary/myLendList(biName=${param.biName},skDate=${param.skDate},svDate=${param.svDate}, currentPage=(${currentPage}+1))}"> 
+			                                	 다음<i class="fa fa-long-arrow-right"></i>
+			                             	</a>
+			                            </span>
+			                         </div>
+                                    </nav>
+                                </div>
+                                <!-- 마이페이지 사이드메뉴  -->
+                                <div th:replace="fragments/library/myPageLeftMenu :: myPageLeftMenuFragment"></div>
+                                <!-- 마이페이지 사이드메뉴-->
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+    </th:block>
+</html>

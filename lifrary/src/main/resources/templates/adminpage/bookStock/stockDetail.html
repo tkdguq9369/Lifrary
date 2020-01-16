@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/admin/adminDefault}"
+	  class="default-style">
+	  
+	  <th:block layout:fragment="adminTitle">
+		<title>도서상세정보</title>
+	  </th:block>
+	  
+	  <th:block layout:fragment="adminHeadAdd">
+	  <link rel="stylesheet" th:href="@{/adminStatic/vendor/css/pages/users.css}">
+ 	  </th:block>
+ 	  
+ 	 <th:block layout:fragment="teamHeadScript">
+     <script type="text/javascript" th:inline="javascript">  
+       $(document).ready(function(){ 
+    	   
+    	   $('#deleteBtn').click(function(){
+    		   var bsDeleteReason = $('#bsDeleteReason').val();
+    		   
+    		   if(bsDeleteReason == ''){
+   				alert('도서 삭제사유를 입력해주세요');
+   				$('#bsDeleteReason').focus();
+   				return false;
+   			}
+    	   });
+    	   
+    	   $('#deleteBtn').click(function(){
+    		   
+    		   var SAID = [[${session.SAID}]]
+    		   var write = $('#uPw').val();
+    		   var bsCode = $('#bsCode').val();
+    		   var bsDeleteReason = $('#bsDeleteReason').val();
+    		   
+    		 
+    		   // 에이작스시작 
+    		   var request = $.ajax({
+					url:"/updateStockDelete",
+					method: "POST",
+					data : { 'said' : SAID , 'write' : write ,'bsCode' :bsCode ,'bsDeleteReason':bsDeleteReason}, 
+					dataType: "text"
+				});
+				 
+				request.done(function( data ) {
+
+					 console.log(data);
+					 if(data == '비밀번호가 틀렸습니다'){
+						 alert(data);
+						 $('#uPw').focus();
+					 }else if(data =='도서 삭제가 완료되었습니다'){
+						 alert(data);
+						 $('#modals-default').modal('hide');
+						
+					 }
+						
+				});
+				 
+				request.fail(function( jqXHR, textStatus ) {
+					alert( "Request failed: " + textStatus );
+				});
+				
+    	   });				
+    	}); // 처음 function끝
+    	</script>
+  	    </th:block>
+ 
+  <!-- Content -->
+         <th:block layout:fragment="adminContents">
+         	<div class="layout-content">
+         		<div class="container-fluid flex-grow-1 container-p-y" >
+        
+         			<div th:with="s=${stockDetail}" class="media align-items-center py-3 mb-3">
+		              <img th:src="${s.bookInformation.biImg}" alt="이미지를 찾을 수 없습니다" class="d-block ui-w-100 rounded-circle">
+		              <div class="media-body ml-4" > 
+		                <h4 class="font-weight-bold mb-0" th:text="${s.bookInformation.biName}"></h4>
+		                <div class="text-muted mb-2">등록자:
+		                	<span th:text="${s.uId}"></span>
+		                </div>
+		                
+		           <th:block th:if="${session.SALBS} == 'O'"> 
+		                <a th:href="@{/admin/stockDetailUpdate(bsCode=${s.bsCode})}" class="btn btn-primary btn-sm">수정</a>&nbsp;
+		           </th:block>
+		           <th:block th:if="${session.SADIV} == '관리자'">
+		            
+		                <a href="javascript:void(0)" class="btn btn-default btn-sm" data-toggle="modal" data-target="#modals-default">삭제</a>&nbsp; 
+		           </th:block>               
+		              </div>
+		            </div>
+		            <div class="card mb-4">
+		              <div class="card-body">
+		                <table th:with="s=${stockDetail}" class="table user-view-table m-0" > <!-- th:with="m = ${#}" -->
+		                  <tbody>
+		                    <tr>
+		                      <td>도서코드:</td><td th:text="${s.bsCode}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>ISBN:</td><td th:text="${s.bookInformation.biIsbn}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>청구기호:</td><td th:text="${s.bsCallNum}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>대분류:</td><td th:text="${s.bookCate.bclName}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>중분류:</td><td th:text="${s.bookCate.bcmName}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>저자:</td><td th:text="${s.bookInformation.biAuthor}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>발행자:</td><td th:text="${s.bookInformation.biPublisher}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>발행년도:</td><td th:text="${s.bookInformation.biYear}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>총페이지수:</td><td th:text="|${s.bsTotalPage}p|"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>상세내용:</td><td th:text="${s.bookInformation.biDtail}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>반입구:</td><td th:text="${s.bsCarryRoute}"></td>
+		                    </tr>
+		                    
+		                    <tr>
+		                      <td>책상태:</td>
+		                      <td>
+		                      	 <button th:if="${s.bsBookState eq '정상'}" type="button" class="btn btn-xs btn-outline-primary">[[${s.bsBookState}]]</button>
+				      			 <button th:unless="${s.bsBookState eq '정상'}" type="button" class="btn btn-xs btn-outline-success">[[${s.bsBookState}]]</button>		                      
+		                      </td>
+		                    </tr>
+		                    <tr>
+		                      <td>대출가능상태:</td>
+		                      <td>
+		                      	  <button th:if="${s.bsLendState eq 'O'}" type="button" class="btn btn-xs btn-outline-success">대출가능</button>
+				      			  <button th:unless="${s.bsLendState eq 'O'}" type="button" class="btn btn-xs btn-outline-danger">대출불가</button>
+				      			  
+		                      </td>
+		                    </tr>
+		                    <tr>
+		                      <td>등록일자:</td><td th:text="${s.bsDate}"></td>
+		                    </tr>
+		                  </tbody>
+		                  
+		                </table>
+		                
+		                 <div class="text-right mt-3" th:with="s=${stockDetail}">
+		                  	<button type="submit" class="btn btn-primary">
+		                  		<a th:href="@{/admin/stockSearchList}" style="color: white">리스트로 이동</a>
+		                  	</button>
+		                  	<button type="submit" class="btn btn-primary">
+		                  		<a th:href="@{/lifrary/bookDetail(bsCode=${s.bsCode})}" style="color: white">도서관 상세페이지로 이동</a>
+		                  	</button>
+		 				  </div>
+		              </div>
+	               </div>    
+         		</div>
+         	</div>
+         	<div class="modal fade" id="modals-default">
+                  <div class="modal-dialog">
+                    <form class="modal-content" th:with="s=${stockDetail}">
+                      <div class="modal-header">
+                        <h5 class="modal-title">
+                          	도서 삭제
+                          
+                          <br>
+                          <small class="text-muted"> 정말 삭제 하시겠습니까? 삭제하시는 경우 복구가 가능한 목록입니다.<br>
+                                                            삭제를 위하여 삭제사유와 본인 id의 password를 작성해 주세요.</small>
+                        </h5>
+                        <a th:href="@{/admin/stockSearchList}"  type="button" class="close" data-dismiss="modal" aria-label="Close">×</a>
+                      </div>
+                      <div class="modal-body">
+                      	<div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">삭제사유</label>
+                            <input type="hidden" id="bsCode" th:value="${s.bsCode}">
+                            <input id="bsDeleteReason" type="text" class="form-control">
+                          </div>
+                        </div>
+                      	<div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">ID</label>
+                            <input id="uId" type="text" class="form-control" th:value="${session.SAID}">
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col">
+                            <label class="form-label">PASSWORD</label>
+                            <input id="uPw" type="password" class="form-control" placeholder="***********">
+                          </div>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <a th:href="@{/admin/stockSearchList}" id="deleteBtn" type="button" class="btn btn-primary">삭제</a>
+                      </div>
+                    </form>
+                  </div>
+                </div>         
+
+          </th:block>
+          
+          <!-- / Content -->
+ 
+  		  
+          
+</html>

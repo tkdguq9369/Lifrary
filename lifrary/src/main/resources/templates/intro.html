@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		 class="default-style">
+<head th:replace="fragments/library/introHead :: introHeadFragment"></head>
+<th:block layout:fragment="libraryTitle">
+	<title>..:: WELCOME LIFRARY ::..</title>
+</th:block>
+
+ <th:block layout:fragment="customScript">
+     <script type="text/javascript" th:inline="javascript">  
+       $(document).ready(function(){  
+    	   
+    		// 유효성검사 시작
+    		$('#searchBtn').click(function(){   			
+    			var lCode = $('#lCode');
+    			var biName = $('#biName');
+    			console.log(biName.val());
+    			
+    			if(lCode.val() == '0'){
+    				alert('도서관을 선택해 주세요');
+    				lCode.focus();
+    				return false;
+    			}
+    			if(biName.val() == ''){
+    				alert('검색어를 입력해주세요');
+    				biName.focus();
+    				return false;
+    			} 			
+    			$('#searchForm').submit();
+    			
+    		}); // 유효성검사 끝    		
+    	}); // 처음 function끝
+    	    	
+  	</script>
+    </th:block>
+    
+    <body class="layout-v3">
+        <th:block layout:fragment="customContents">  
+		     <div data-ride="carousel" class="carousel" id="home-v1-header-carousel" >
+	            <div class="carousel-inner">
+	                <div class="item active">
+	                    <figure>
+	                        <img th:src="@{/libraryStatic/images/header-slider/home-v3/header-slide.jpg}">
+	                    </figure>
+	                        <div class="carousel-caption">
+	                            <h2>LIFRARY</h2>
+	                            <p><strong>"LIFE" </strong> and <strong>"LIBRARY"</strong></p>
+	                            <div class="container-fluid">
+	                           		<div class="row">
+			                            <div class="filter-box">
+			                                <form id="searchForm" th:action="@{/lifrary/introSearchList}" class="banner-filter-box" method="get">
+												<div class="form-group">
+			                                        <select name="lCode" id="lCode">
+			                                            <option value="0">::도서관 선택::</option>
+			                                            <option value="000000">오각형 도서관</option>
+			                                            <option value="111111">사각형 도서관</option>
+			                                        </select>
+			                                    </div>                                       
+			                                    <div class="form-group">
+			                                        <label class="sr-only" for="keywords">도서명을 입력하세요</label>
+			                                        <input class="form-control" placeholder="도서명을 입력하세요" id="biName" name="biName" type="text">
+			                                    </div>
+			                                    <div class="form-group">
+			                                    <input id="searchBtn" class="form-control" type="button" value="Search">
+			                               		</div>
+			                                </form>
+			                            </div>
+		                             </div>
+		                             <div class="row">
+			                            <div>
+				                		<!-- <p><strong>*</strong> 배포 날짜 : 2020-01-07</p> -->
+						                  <div class="facts-counter">
+						                      <ul>
+						                          <li class="col-sm-4">
+						                              <div class="fact-item">
+						                                  <div class="fact-icon">
+						                                      <img th:src="@{/libraryStatic/images/pentagon.png}" alt="" />
+						                                  </div>
+						                                  <a th:href="@{/pentagon/index}"><span style="color: rgb(255, 198, 10);">펜타곤 도서관 <strong>Home</strong></span></a>
+						                              </div>
+						                          </li>
+						                          <li class="col-sm-4">
+						                              <div class="fact-item">
+						                                  <div class="fact-icon">
+						                                      <img th:src="@{/libraryStatic/images/square.png}" alt="" />
+						                                  </div>
+						                                  <a th:href="@{/square/index}"><span style="color: rgb(64, 162, 215);">스퀘어 도서관<strong>Home</strong></span></a>
+						                              </div>
+						                          </li>
+						                          <li class="col-sm-4">
+						                              <div class="fact-item">
+						                                  <div class="fact-icon">
+						                                      <img th:src="@{/libraryStatic/images/admin.png}" alt="" />
+						                                  </div>
+						                                  <a th:href="@{/admin/login}"><span style="color: #fff;">관리자 페이지<strong>Admin</strong></span></a>
+						                              </div>
+						                          </li>
+						                      </ul>
+						          		</div>
+						          	</div>
+		     					</div>
+	                       </div>	
+	                  </div>
+				  </div>
+			   </div>
+			</div>
+         </th:block>
+    </body>
+</html>

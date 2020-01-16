@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/admin/adminDefault}"
+	  class="default-style">
+	  
+	  <th:block layout:fragment="adminTitle">
+		 <title>수서-주문관리</title>
+	  </th:block>
+	
+	  
+<!-- headAdd(Libs&page) -->
+  
+	  <th:block layout:fragment="adminHeadAdd">	  
+	  <!-- addLibs -->
+	      <link rel="stylesheet" th:href="@{/adminStatic/vendor/libs/datatables/datatables.css}">
+	      <link rel="stylesheet" th:href="@{/adminStatic/vendor/libs/datatables/select.dataTables.min.css}">
+	  <!-- addPage -->	  
+	    <script th:src="@{/adminStatic/vendor/js/jquery-3.3.1.min.js}"></script>
+	    <script th:src="@{/adminStatic/vendor/js/jquery.dataTables.js}"></script>
+	    <script th:src="@{/adminStatic/vendor/js/dataTables.responsive.min.js}"></script>
+	    <script th:src="@{/adminStatic/vendor/js/dataTables.buttons.min.js}"></script>
+		<script th:src="@{/adminStatic/vendor/js/buttons.html5.min.js}"></script>
+		<script th:src="@{/adminStatic/js/tables_datatables_order.js}"></script>
+	  </th:block>
+	  
+<!-- /headAdd(Libs&page) --> 
+
+     <th:block layout:fragment="teamHeadScript">
+     <script type="text/javascript" th:inline="javascript"> 
+     //<![CDATA[
+           var SAID = [[${session.SAID}]]
+    //]]>  
+    	   function show(boCode){
+    		   
+    		   var boCode = boCode;
+    	    	
+    		   $('#boCode2').val(boCode);
+    		   $("#modals-default").modal('show');
+
+    	   };
+
+    	   $(document).on('click','#deleteBtn', function(){  
+    		   
+
+    		   var write = $('#uPw').val();
+    		 
+    		   var boCode2 = $('.modal-body #boCode2').val();
+
+    		   
+    		   
+    		   var request = $.ajax({
+					url:"/deleteOrder",
+					method: "POST",
+					data : { 'said' : SAID , 'write' : write ,'boCode' :boCode2 }, 
+					dataType: "text"
+				});
+				 
+				request.done(function( data ) {
+
+					 console.log(data);
+					 if(data == '비밀번호가 틀렸습니다'){
+						 alert(data);
+						 $('#uPw').focus();
+					 }else if(data =='도서 삭제가 완료되었습니다'){
+						 alert(data);
+						 $('#modals-default').modal('hide');
+						 location.reload(true);
+						
+					 }
+						
+				});
+				 
+				request.fail(function( jqXHR, textStatus ) {
+					alert( "Request failed: " + textStatus );
+				}); 
+				
+    	      				
+    	}); // 처음 function끝
+    	    	
+    	</script>
+  	    </th:block>
+ 
+ 
+  <!-- Content -->
+         <th:block layout:fragment="adminContents">
+         
+         <h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+			<div>주문 도서 리스트</div>
+			
+			 <th:block th:if="${session.SALC} == 'O'">	
+				<a th:href="@{/admin/bookOrderInsert}" class="btn btn-primary rounded-pill d-block"> 
+					<span class="ion ion-md-add"></span>도서 추가
+				</a>
+			 </th:block>		
+			
+		 </h4>
+         
+            <!-- DataTable within card -->
+
+            <div class="card">
+              
+              <div class="card-datatable table-responsive">
+                <table id="myTable" class="datatables-demo table table-striped table-bordered">               
+                
+                  <thead>
+                    <tr>
+                      <th>ISBN</th>
+                      <th>도서명</th>
+                      <th>저자명</th>
+                      <th>업체명</th>
+                      <th>권수</th>
+                      <th>결제가격</th>
+                      <th>상태</th>
+                      <th>등록일</th>
+                      <th>상세&수정</th>
+                      <th>삭제</th>              
+                    </tr>
+                  </thead>
+                  
+                  <tbody>
+				    <tr th:each="ol : ${orderList}">
+				 
+				      <td class="align-middle" th:text="${ol.bookInformation.biIsbn}"></td>
+				      <td class="align-middle" th:text="${#strings.abbreviate(ol.bookInformation.biName,20)}"></td>
+				      <td class="align-middle" th:text="${#strings.abbreviate(ol.bookInformation.biAuthor,12)}"></td>
+				      <td class="align-middle" th:text="${ol.boCompany}"></td>
+				      <td class="align-middle" th:text="${ol.boBookNum}"></td>
+				      <td class="align-middle" th:text="${ol.boPrice}"></td>
+				      <td class="align-middle text-center"> 
+					      <span th:if="${ol.bosState eq '수령완료'}">
+					      	 <a th:href="@{/updateOrderState(boCode=${ol.boCode},bosState=${ol.bosState})}" class="badge badge-outline-success">[[${ol.bosState}]]</a>
+					      </span>
+					      <span th:unless="${ol.bosState eq '수령완료'}">
+					      	 <a th:href="@{/updateOrderState(boCode=${ol.boCode},bosState=${ol.bosState})}" class="badge badge-outline-danger">[[${ol.bosState}]]</a>
+					      </span>
+				      </td >				      
+				      <td th:text="${ol.boDate}"></td>
+				      <td class="align-middle text-center">
+				      
+						   <a th:href="@{/admin/bookOrderUpdate(boCode=${ol.boCode})}" class="btn btn-default btn-xs icon-btn md-btn-flat"title="수정">
+							 <i class="ion ion-md-create" title="수정"></i>
+						   </a>
+					</td>
+					<td class="align-middle text-center">
+					  <input type="hidden" id="boCode" th:value="${ol.boCode}">  					  
+                      <button id="modalBtn" class="btn btn-default btn-xs icon-btn md-btn-flat"  
+                      th:attr="onclick=|javascript:show('${ol.boCode}')|"
+                      data-toggle="modal" data-target="#modals-default">                    	
+                      		<i class="ion ion-ios-cut d-block"  title="삭제"></i>	 
+                      </button>
+                     </td>	
+				    </tr>
+				    
+				  </tbody> 
+                </table>
+              </div>
+            </div>
+         <div class="modal fade" id="modals-default">
+                <div class="modal-dialog">
+                  <form class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">
+                        	주문도서 목록 삭제
+                        
+                        <br>
+                        <small class="text-muted">정말 삭제 하시겠습니까? 삭제하시는 경우 복구가 불가능한 목록입니다.<br>
+                                                          삭제를 위하여 본인 id의 password를 작성해 주세요.</small>
+                      </h5>          
+                       <a th:href="@{/admin/bookOrderList}"  type="button" class="close" data-dismiss="modal" aria-label="Close">×</a>
+                    </div>
+                    <div class="modal-body">
+                    	<div class="form-row">
+                        <div class="form-group col">
+                          <label class="form-label">ID</label>
+                          <input type="hidden" id="boCode2" >
+                          <input id="uId" type="text" class="form-control" th:value="${session.SAID}">
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col">
+                          <label class="form-label">PASSWORD</label>
+                          <input id="uPw" type="password" class="form-control" placeholder="***********">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                      
+                        <a th:href="@{#}" id="deleteBtn" type="button" class="btn btn-primary">삭제</a>
+                    </div>
+                    
+                  </form>
+                </div>
+              </div>               
+                    
+
+          </th:block>
+          
+          <!-- / Content -->
+         
+          <!-- script -->
+          <th:block layout:fragment="pageScript">
+
+		  <!-- addLibs -->
+		    <script th:src="@{/adminStatic/vendor/libs/datatables/datatables.js}"></script> 
+		    <script th:src="@{/adminStatic/vendor/libs/datatables/dataTables.select.min.js}"></script>
+		
+		  <!-- addDemo -->
+		    
+		  </th:block>
+  		  <!-- /script -->
+  		  
+  		  
+          
+</html>

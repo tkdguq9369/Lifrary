@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/admin/adminDefault}"
+	  class="default-style">
+ <!-- headAdd(Libs&page) -->
+  <th:block layout:fragment="adminTitle">
+	<title>문의 사항</title>
+  </th:block>  
+  <th:block layout:fragment="adminHeadAdd">
+  <!-- addLibs -->  
+  <link rel="stylesheet" th:href="@{/adminStatic/vendor/libs/datatables/datatables.css}">
+  <link rel="stylesheet" th:href="@{/adminStatic/vendor/libs/nouislider/nouislider.css}">
+  <link rel="stylesheet" th:href="@{/adminStatic/vendor/libs/bootstrap-select/bootstrap-select.css}">
+  </th:block>
+  
+  <!-- /headAdd(Libs&page) --> 
+  
+  <!-- teamScript -->
+  <th:block layout:fragment="teamHeadScript">
+  <script type="text/javascript" th:inline="javascript">
+  
+  </script>
+  
+  </th:block>
+  <!-- / teamScript  -->
+  
+  <!-- Content -->
+  <th:block layout:fragment="adminContents">
+	<h4 class="d-flex justify-content-between align-items-center w-100 font-weight-bold py-3 mb-4">
+		<div>문의 사항</div>
+	</h4>
+	<div class="card">
+	    <div class="card-datatable table-responsive">
+	      <table class="datatables-demo table table-striped table-bordered">
+	        <thead>
+	                  <tr>
+	                    <th style="width: 10%;">번호</th>
+	                    <th style="width: 50%;">제목</th>
+	                    <th style="width: 10%;">상태</th>
+	                    <th style="width: 10%;">작성자</th>
+	                    <th style="width: 10%;">조회수</th>
+	                    <th style="width: 10%;">작성일</th>
+	                  </tr>
+	                </thead>
+	                <tbody>
+		                  <tr th:each="l,pro : ${boardList}">
+		                  	<td th:text="${pro.count}"></td>
+		                  	<td><a th:href="@{/admin/inquiryDetail(boardCode=${l.boardCode})}" title="상세보기" th:utext="${l.boardTitle}"></a></td>
+		                  	<td>
+		             		<th:block th:if="${l.boardComment} != null">
+		                  		<span class="badge badge-outline-success">답변완료</span>
+		                  	</th:block>
+		                  	<th:block th:if="${l.boardComment} == null">
+		                  		<span class="badge badge-outline-danger">처리중</span>
+		                  	</th:block>
+		                  	</td>
+		                  	<td th:text="${l.uId}"></td>
+		                  	<td th:text="${l.boardPageView}"></td>
+		                  	<td th:text="${l.boardDate}"></td>
+		                  </tr>
+	                </tbody>
+	              </table>
+	    		</div>
+        </div>
+        <!-- Layout content -->
+	   <br>
+	   <br>
+  </th:block>
+  <!-- Content -->
+ 
+  <!-- / scripts -->
+  <th:block layout:fragment="pageScript">
+  
+  <!-- addLibs -->
+  <script th:src="@{/adminStatic/vendor/libs/datatables/datatables.js}"></script>
+  <script th:src="@{/adminStatic/vendor/libs/bootstrap-select/bootstrap-select.js}"></script>
+
+  <!-- addDemo -->
+  <script th:src="@{/adminStatic/js/inquiry_list_tables.js}"></script>
+  </th:block>
+   
+  <!-- teamScript  -->
+  <th:block layout:fragment="adminFootScript">
+
+  </th:block>
+  <!--/ teamScript -->
+
+  <!-- / scripts -->
+  
+</html>

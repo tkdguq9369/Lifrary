@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<th:block layout:fragment="libraryTitle">
+	<title>..:: Portfolio ::..</title>
+</th:block>
+  <head>
+    <title>Niko - Free Bootstrap 4 Template by Colorlib</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/open-iconic-bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/animate.css}">
+    
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/owl.carousel.min.css}">
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/owl.theme.default.min.css}">
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/magnific-popup.css}">
+
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/aos.css}">
+
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/ionicons.min.css}">
+    
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/flaticon.css}">
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/icomoon.css}">
+    <link rel="stylesheet" th:href="@{/portfolioStatic/css/style.css}">
+  </head>
+  <body data-spy="scroll" data-target=".site-navbar-target" data-offset="300" oncontextmenu='return false' ondragstart='return false' onselectstart='return false'>
+	  
+	  
+    <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light site-navbar-target" id="ftco-navbar">
+	    <div class="container">
+	      <a class="navbar-brand" th:href="@{index.html}">N</a>
+	      <button class="navbar-toggler js-fh5co-nav-toggle fh5co-nav-toggle" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+	        <span class="oi oi-menu"></span> Menu
+	      </button>
+
+	      <div class="collapse navbar-collapse" id="ftco-nav">
+	        <ul class="navbar-nav nav ml-auto">
+	          <li class="nav-item"><a th:href="@{#home-section}" class="nav-link"><span>Home</span></a></li>
+	          <li class="nav-item"><a th:href="@{#about-section}" class="nav-link"><span>About</span></a></li>
+	          <li class="nav-item"><a th:href="@{#skills-section}" class="nav-link"><span>Skills</span></a></li>
+	          <li class="nav-item"><a th:href="@{#portfolio-section}" class="nav-link"><span>Portfolio</span></a></li>
+	          <li class="nav-item"><a th:href="@{#blog-section}" class="nav-link"><span>My Blog</span></a></li>
+	          <li class="nav-item"><a th:href="@{#contact-section}" class="nav-link"><span>Contact</span></a></li>
+	        </ul>
+	      </div>
+	    </div>
+	  </nav>
+	  <section id="home-section" class="hero">
+		  <div class="home-slider  owl-carousel">
+	      <div class="slider-item ">
+	      	<div class="overlay"></div>
+	        <div class="container">
+	          <div class="row d-md-flex no-gutters slider-text align-items-end justify-content-end" data-scrollax-parent="true">
+	          	<div class="one-third order-md-last img">
+	          		<div class="overlay"></div>
+	          	</div>
+		          <div class="one-forth d-flex  align-items-center ftco-animate" data-scrollax=" properties: { translateY: '70%' }">
+		          	<div class="text">
+		          		<span class="subheading">안녕하십니까!</span>
+			            <h1 class="mb-4 mt-3">자신감 넘치는 <br>&ensp;신입개발자  <span><br>김상협입니다.</span></h1>
+		            </div>
+		          </div>
+	        	</div>
+	        </div>
+	      </div>
+
+	      
+	    </div>
+    </section>
+
+    <section class="ftco-about ftco-counter img ftco-section" id="about-section">
+    	<div class="container">
+    		<div class="row d-flex">
+    			<div class="col-md-6 col-lg-5 d-flex">
+    				<div class="img-about img d-flex align-items-stretch">
+    					<div class="overlay"></div>
+	    				<div >
+	    				<img class="img d-flex align-self-stretch align-items-center" alt="" th:src="@{/portfolioStatic/images/myPhoto.jpg}">
+	    				</div>
+    				</div>
+    			</div>
+    			<div class="col-md-6 col-lg-7 pl-lg-5 py-5">
+	    			<div class="row justify-content-start pb-3">
+			          <div class="col-md-12 heading-section ftco-animate">
+			          	<span class="subheading">Welcome</span>
+			            <h2 class="mb-4" style="font-size: 34px; text-transform: capitalize;">About Me</h2>
+			            <p>
+			            	안녕하십니까. 신입 개발자 <span style="color: #0075f6;">김상협</span>입니다.<br>
+			            	해결하기 힘든 문제에 직면하더라도 어떻게든 해결하려고 하며<br>
+			            	새로운 것을 두려워 하지 않고 즐기는 마음으로 임하는것이 저의 장점입니다.<br>
+			            	어려운 일이 주어지더라도 해낼 수 있는 개발자가 되겠습니다.<br>
+						</p>
+			          </div>
+			        </div>
+		        <div class="row">
+		        	
+		        	<ul>
+		        		<li>
+		        			<span>Name :</span>
+		        			<span>김상협</span>
+		        		</li>
+		        		<li>
+		        			<span>Birth :</span>
+		        			<span>August 9, 1994</span>
+		        		</li>
+		        		<li>
+		        			<span>Email :</span>
+		        			<span>tkdguq9369@naver.com</span>
+		        		</li>
+		        		<li>
+		        			<span>Phone :</span>
+		        			<span>+82-10-9995-3512</span>
+		        		</li>
+		        		<li>
+		        			<span>Blog :</span>
+		        			<span>
+		        			<a href="https://blog.naver.com/tkdguq9369"  target="_blank">
+		        			https://blog.naver.com/tkdguq9369</a></span>
+		        		</li>
+		        	</ul>
+		        </div>
+		        <br><br>
+		        <div class="row justify-content-start pb-3">
+			          <div class="col-md-12 heading-section ftco-animate">
+			            <h2 class="mb-4" style="font-size: 34px; text-transform: capitalize;">교육 수강</h2>
+			            <p>
+			            	<span>2019.7-2020.1</span>
+							<h3>응용 소프트웨어 개발자 양성 과정</h3>
+							<h2>한국스마트정보교육원</h2>
+							교육이수내역<br><br>
+							⊙ 응용 소프트웨어 개발자 양성 과정<br>
+							(응용SW 및 DB엔지니어링 융합 / NCS직종 : 20010202 6개월과정)<br>
+							<br>
+							▷ 교재<br>
+							그림으로 배우는 Java Programming, node.js 교과서, SQL활용/데이터베이스구현/데이터입출력구현/애플리케이션테스트관리/애플리케이션테스트수행 /요구사항확인/정보시스템이행/제품소프트웨어패키징/제품소프트웨어패키징/ 화면구현/통합구현/화면설계(NCS학습모듈 개발진)<br>
+							<br>
+							▷교육활동<br>
+							sql활용(mysql, mybatis)<br>
+							데이터베이스 구현(mysql, oracle)<br>
+							요구사항 확인<br>
+							데이터 입출력 구현(java, model1, model2)<br>
+							통합구현(spring mvc)<br>
+							정보시스템 이행<br>
+							제품소프트웨어 패키징<br>
+							서버프로그램 구현(Apache tomcat)<br>
+							애플리케이션 테스트 수행(단위테스트, 통합테스트)<br>
+							애플리케이션 배포(cafe24)<br>
+							프로그래밍 언어활용(기초문법)<br>
+							응용 SW기초 기술 활용<br>
+							화면설계<br>
+							애플리케이션 테스트 관리<br>
+							인터페이스 구현<br>
+							화면구현(javascript문법, HTML, CSS)<br>
+						</p>
+			          </div>
+			        </div>
+	         
+	        </div>
+        </div>
+    	</div>
+    </section>
+		
+		<section class="ftco-section bg-light" id="skills-section">
+			<div class="container">
+				<div class="row justify-content-center pb-5">
+		          <div class="col-md-12 heading-section text-center ftco-animate">
+		          	<span class="subheading">Skills</span>
+		            <h2 class="mb-4">My Skills</h2>
+		            <p>
+						JAVA의 객체지향과 디자인 패턴을 이해했고 MVC 패턴의 모델 1과 모델2를 이용하여 설계를 할 수 있습니다.<br>
+						SQL은 기본적인 DDL,DML,DCL을 이해했고 ORACLE, MySQL을 이용해서 전반적인 QUERY 문장을 작성할 수 있습니다.<br>
+						HTML/CSS는 기본적인 테그에 대해 이해를 하고 웹 표준, 웹 접근성등의 기본규격을 맞춰 화면을 구현할 수 있습니다.<br>
+						JavaScript의 기본적인 개념을 이해하고 jQuery의 다양한 메서드를 사용할 수 있습니다.<br>
+					</p>
+		          </div>
+       			</div>
+				<div class="row">
+					<div class="col-md-6 animate-box">
+						<div class="progress-wrap ftco-animate">
+							<h3>Java</h3>
+							<div class="progress">
+							 	<div class="progress-bar color-1" role="progressbar" aria-valuenow="75"
+							  	aria-valuemin="0" aria-valuemax="100" style="width:85%">
+							    <span>85%</span>
+							  	</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 animate-box">
+						<div class="progress-wrap ftco-animate">
+							<h3>jQuery</h3>
+							<div class="progress">
+							 	<div class="progress-bar color-2" role="progressbar" aria-valuenow="60"
+							  	aria-valuemin="0" aria-valuemax="100" style="width:80%">
+							    <span>80%</span>
+							  	</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 animate-box">
+						<div class="progress-wrap ftco-animate">
+							<h3>HTML5</h3>
+							<div class="progress">
+							 	<div class="progress-bar color-3" role="progressbar" aria-valuenow="85"
+							  	aria-valuemin="0" aria-valuemax="100" style="width:85%">
+							    <span>85%</span>
+							  	</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 animate-box">
+						<div class="progress-wrap ftco-animate">
+							<h3>CSS</h3>
+							<div class="progress">
+							 	<div class="progress-bar color-4" role="progressbar" aria-valuenow="90"
+							  	aria-valuemin="0" aria-valuemax="100" style="width:70%">
+							    <span>70%</span>
+							  	</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 animate-box">
+						<div class="progress-wrap ftco-animate">
+							<h3>SQL</h3>
+							<div class="progress">
+							 	<div class="progress-bar color-5" role="progressbar" aria-valuenow="70"
+							  	aria-valuemin="0" aria-valuemax="100" style="width:80%">
+							    <span>80%</span>
+							  	</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6 animate-box">
+						<div class="progress-wrap ftco-animate">
+							<h3>Ajax</h3>
+							<div class="progress">
+							 	<div class="progress-bar color-6" role="progressbar" aria-valuenow="80"
+							  	aria-valuemin="0" aria-valuemax="100" style="width:80%">
+							    <span>80%</span>
+							  	</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</section>
+
+	<section id = "portfolio-section">
+	<div class="container">
+	<div class="row justify-content-center py-5 mt-5">
+        <div class="col-md-12 heading-section text-center ftco-animate">
+        	<span class="subheading">portfolio</span>
+          <h2 class="mb-4">Portfolio</h2>
+          <p>전국민 독서량 증진과 도서관 방문율을 향상시키는 전국 도서관 통합 관리 시스템 ( Lifrary )</p>
+        </div>
+      </div>
+		<div class="row d-flex">
+          <div class="col-md-4 d-flex ftco-animate"  style="padding-left: 4%;">
+          
+          	<div class="blog-entry justify-content-end">
+             	 <img th:src="@{/portfolioStatic/images/myProject.png}" style="border-style: dashed;">
+              <div class="text mt-3 float-right d-block" style="padding-left: 41%;">
+              	
+                <h6>
+					<br>
+	              <a th:href="@{/intro}" target="_blank" class="block-10">
+						<button>프로젝트 보러 가기</button>
+	              </a>
+				</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+				</div>
+	</section>
+		
+
+    <section class="ftco-section bg-light" id="blog-section">
+      <div class="container">
+        <div class="row justify-content-center mb-5 pb-5">
+          <div class="col-md-7 heading-section text-center ftco-animate">
+            <span class="subheading">Blog</span>
+            <h2 class="mb-4">Blog</h2>
+            <p>교육원을 들어오고부터 <br>공부 및 기록을 담았습니다.</p>
+          </div>
+        </div>
+        <div class="row d-flex">
+          <div class="col-md-4 d-flex ftco-animate"  style="padding-left: 43%;">
+          
+          	<div class="blog-entry justify-content-end">
+             	 <img th:src="@{/portfolioStatic/images/myBlog.png}" style="border-style: dashed;">
+              <div class="text mt-3 float-right d-block" style="padding-left: 16px;">
+              	
+                <h6>
+					<br>
+	              <a href="https://blog.naver.com/tkdguq9369" target="_blank" class="block-10">
+						<button>블로그 보러 가기</button>
+	              </a>
+				</h6>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </section>
+	
+	
+	<section id = "contact-section">
+	<div class="container">
+	<div class="row justify-content-center py-5 mt-5">
+		          <div class="col-md-12 heading-section text-center ftco-animate">
+		          	<span class="subheading">contact</span>
+		            <h2 class="mb-4">Contact Me</h2>
+		          </div>
+		        </div>
+		<div class="row">
+					<div class="col-md-4 text-center d-flex ftco-animate">
+						<div class="services-1">
+							<span class="icon">
+								<i class="flaticon-analysis"></i>
+							</span>
+							<div class="desc">
+								<h3 class="mb-5">Contact Number</h3>
+								<h4>+82-10-9995-3512</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 text-center d-flex ftco-animate">
+						<div class="services-1">
+							<span class="icon">
+								<i class="flaticon-flasks"></i>
+							</span>
+							<div class="desc">
+								<h3 class="mb-5">Email Address</h3>
+								<h4>tkdguq9369@naver.com</h4>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4 text-center d-flex ftco-animate">
+						<div class="services-1">
+							<span class="icon">
+								<i class="flaticon-ideas"></i>
+							</span>
+							<div class="desc">
+								<h3 class="mb-5">Blog</h3>
+								<a href="https://blog.naver.com/tkdguq9369" target="_blank"><span>https://blog.naver.com/tkdguq9369</span></a>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+	</section>
+
+  <!-- loader -->
+  <div id="ftco-loader" class="show fullscreen">
+	  <svg class="circular" width="48px" height="48px">
+		  <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+		  <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/>
+	  </svg>
+  </div>
+
+
+  <script th:src="@{/portfolioStatic/js/jquery.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/jquery-migrate-3.0.1.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/popper.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/bootstrap.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/jquery.easing.1.3.js}"></script>
+  <script th:src="@{/portfolioStatic/js/jquery.waypoints.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/jquery.stellar.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/owl.carousel.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/jquery.magnific-popup.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/aos.js}"></script>
+  <script th:src="@{/portfolioStatic/js/jquery.animateNumber.min.js}"></script>
+  <script th:src="@{/portfolioStatic/js/scrollax.min.js}"></script>
+  
+  <script th:src="@{/portfolioStatic/js/main.js}"></script>
+    
+  </body>
+</html>

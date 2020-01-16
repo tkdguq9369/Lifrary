@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<!-- 도서검색 리스트 -->
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/library/libraryDefault}"
+		class="default-style">
+	 <th:block layout:fragment="libraryTitle">
+		<title>검색도서 목록</title>
+	 </th:block>
+    
+     <th:block layout:fragment="customScript">
+     <style>
+ 	.post-thumbnail img {
+ 		max-width: 100%; 
+ 		height: 300px;
+ 		display: block; 
+ 		margin-left: auto;
+		margin-right: auto;
+ 	}
+ 	@media (max-width: 991px){
+ 		.category-list img {
+ 		max-width: 100%; 
+ 		height: 300px;
+ 		}
+ 	}
+ 	.center-content {
+ 		margin: 10px 0 10px 0;
+ 	}
+ 	</style>
+     <script type="text/javascript" th:inline="javascript">  
+       $(document).ready(function(){  	
+    	   
+    		// 유효성검사 시작
+    		$('#searchBtn').click(function(){   			
+    			var biName = $('#biName');
+    			
+    			if(biName.val() == ''){
+    				alert('검색어를 입력해주세요');
+    				biName.focus();
+    				return false;
+    			}
+    			    			
+    			$('#searchForm').submit();
+    			
+    		}); // 유효성검사 끝    		
+    	}); // 처음 function끝
+    	    	
+    	</script>
+  	    </th:block>
+    
+    
+    <th:block layout:fragment="customContents">
+  
+    
+    <!-- Start: Book & Media Section -->
+    <!-- Start: Page Banner -->
+        <section class="page-banner services-banner" th:fragment="bookBannerFragment">
+            <div class="container">
+                <div class="banner-header">
+                    <h2>도서 검색 결과</h2>
+                    <span class="underline center"></span>
+                    <p class="lead">검색하신 도서 입니다</p>
+                </div>
+                <div class="breadcrumb">
+                    <ul>
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li>Books</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    <!-- End: Page Banner --> 
+    <div class="books-media-list">
+         <div class="container">
+             <div class="row">
+                 <!-- Start: Search Section -->
+                 <section class="search-filters" th:fragment="searchSectionFragment">
+			          <div class="row">
+            					    <div class="col-md-11 col-md-push-1">
+			              <div class="container">
+			                 <div class="filter-box">
+			                      <form id="searchForm" th:action="@{/lifrary/bookDataSearchList}" method="get">							    
+			                        <div class="col-md-3 col-sm-6">
+			                            <div class="form-group">
+			                                <select name="bclCode" id="bclCode" class="form-control">
+			                                    <option value="bcl001">단행본</option>
+			                                    <option value="bcl002">연속간행물</option>
+			                                    <option value="bcl003">비도서</option>                            
+			                                </select>
+			                            </div>
+			                        </div>
+			                        <div class="col-md-4 col-sm-6">
+			                            <div class="form-group">
+			                                <label class="sr-only" for="keywords">자료 검색</label>
+			                                <input id="biName" name="biName" class="form-control" placeholder="검색" type="text">
+			                            </div>
+			                        </div>
+			                        <div class="col-md-2 col-sm-6">					                     
+			                            <div class="form-group">
+			                                <input id="searchBtn" class="form-control" type="submit" value="검색">
+			                            </div>
+			                        </div>
+			                        <div class="col-md-2 col-sm-6" style="margin-top: 5px">					                     
+			                                <a th:href="@{/lifrary/bookDataSearchDetail}" class="btn btn-dark-gray">상세검색</a>			             
+			                        </div>
+			                        
+			                    </form>
+			                 </div>
+			               </div>
+			             </div>
+			           </div>
+			        </section>
+                 <!-- End: Search Section -->
+             </div>
+             <div class="row">
+                 <div class="col-md-10 col-md-push-1">
+                 
+                 <!-- 정렬  -->
+                     <div class="filter-options margin-list">
+                         <div class="row">                                            
+                           <div class="col-md-4 col-sm-4">
+                              <div class="select">
+                                 <select name="orderBy" class="select-hidden">
+                                     <option value="bi.bi_name" selected="selected">도서명</option>
+                                     <option value="bi.bi_author">저자명</option>
+                                     <option value="bi.bi_year">발행년도</option>
+                                     <option value="bi.bi_publisher">발행자(출판사)</option>
+                                 </select>
+                               </div>
+                             </div>
+                             <div class="col-md-4 col-sm-4">
+                              <div class="select">
+                                 <select name="sort" class="select-hidden">
+                                     <option value="ASC" selected="selected">오름차순</option>
+                                     <option value="DESC">내림차순</option>
+                                 </select>
+                               </div>
+                             </div>
+                             <!-- <div class="col-md-4 col-sm-4">
+                                 <div class="filter-result">Showing items 1 to 9 of 19 total</div>
+                             </div> -->
+                             <div class="col-md-3 col-sm-3 pull-right" style="margin-bottom: 30px">
+                                 <div class="filter-toggle" >
+                                	 <input type="hidden" name="bclCode" value="${bclCode}">
+                                	 <input type="hidden" name="biName" value="${biName}">
+                                     <a th:href="@{/lifrary/bookDataSearchGrid(bclCode=${param.bclCode},biName=${param.biName},biPublisher=${param.biPublisher},
+                                     biIsbn=${param.biIsbn},biAuthor=${param.biAuthor},biDtail=${param.biDtail},biYearStart=${param.biYearStart},biYearEnd=${param.biYearEnd},currentPage=1)}">
+										<i class="glyphicon glyphicon-th-large"></i></a>
+                                     <a href="books-media-list-view.html" class="active"><i class="glyphicon glyphicon-th-list"></i></a>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     
+                      <!-- 책정보 하나씩  -->
+                     <div class="books-list">
+                      <th:block th:if="${#lists.size(searchList)} > 0">
+                         <article th:each="sl : ${searchList}"> 
+                             <div class="single-book-box">                                                
+                                 <div class="post-thumbnail">                                     
+                                     <a th:href="@{/lifrary/bookDetail(bsCode=${sl.bsCode})}">
+                                     	<img alt="도서 이미지를 찾을 수 없습니다" th:src="${sl.bookInformation.biImg}">
+                                     </a>
+                                 </div>
+                                 <div class="post-detail">           
+                                     <header class="entry-header">
+                                         <div class="row">
+                                             <div class="col-sm-12">
+                                                 <h3 class="entry-title">
+                                                     <a th:href="@{/lifrary/bookDetail(bsCode=${sl.bsCode})}">
+                                                     	<span th:text="${sl.bookInformation.biName}"></span>
+                                                     </a>
+                                                 </h3>
+                                                 <ul>
+                                                     <li><strong>저자:</strong>&emsp;<span th:text="${sl.bookInformation.biAuthor}"></span></li>
+                                                     <li><strong>ISBN:</strong>&emsp;<span th:text="${sl.bookInformation.biIsbn}"></span></li>
+                                                     <li><strong>청구기호:</strong>&emsp;<span th:text="${sl.bsCallNum}"></span></li>
+                                                 </ul>
+                                             </div>
+                                             
+                                         </div>
+                                     </header>
+                                     <div class="entry-content">
+                                         <p th:text="${#strings.abbreviate(sl.bookInformation.biDtail,70)}"></p>
+                                     </div>
+                                     <footer class="entry-footer">
+                                         <a class="btn btn-dark-gray" th:href="@{/lifrary/bookDetail(bsCode=${sl.bsCode})}">상세보기</a>
+                                     </footer>
+                                 </div>
+                                 <div class="clear"></div>
+                             </div>
+                           </article>
+                         </th:block>
+                         <th:block th:unless="${#lists.size(searchList)} > 0">
+                         
+                          <article style="margin-bottom: 40px">
+                              <div class="align-middle text-center" ><p>검색 결과가 없습니다.</p></div>
+                          </article>
+                         
+                         </th:block>
+                      </div>
+                      <nav class="navigation pagination text-center" style="margin-bottom: 40px">
+                         <h2 class="screen-reader-text">Posts navigation</h2>
+                         <div class="nav-links">   
+                         	 <span th:if="${currentPage > 1}">
+                             	<a class="prev page-numbers" th:href="@{/lifrary/bookDataSearchList(bclCode=${param.bclCode},biName=${param.biName},biPublisher=${param.biPublisher},
+                                     biIsbn=${param.biIsbn},biAuthor=${param.biAuthor},biDtail=${param.biDtail},biYearStart=${param.biYearStart},biYearEnd=${param.biYearEnd},currentPage=(${currentPage}-1))}">
+                                     <i class="fa fa-long-arrow-left"></i> 이전
+                                 </a>
+                             </span>
+                             
+                                              
+	                         <th:block th:each="num : ${#numbers.sequence(startPageNum,lastPageNum)}">
+						        <span th:if="${currentPage == num}" th:text="${num}" class="page-numbers current"></span>
+						        <span th:unless="${currentPage == num}">
+						        	<a th:text="${num}" class="page-numbers" th:href="@{/lifrary/bookDataSearchList(bclCode=${param.bclCode},biName=${param.biName},biPublisher=${param.biPublisher},
+	                                     biIsbn=${param.biIsbn},biAuthor=${param.biAuthor},biDtail=${param.biDtail},biYearStart=${param.biYearStart},biYearEnd=${param.biYearEnd},currentPage=${num})}">
+	                                </a>
+						    	</span>
+						    
+						     </th:block>
+						      
+						      
+						                             
+                             <span th:if="${currentPage != lastPage}"> 
+                             	<a class="next page-numbers" th:if="${currentPage != lastPage}" th:href="@{/lifrary/bookDataSearchList(bclCode=${param.bclCode},biName=${param.biName},biPublisher=${param.biPublisher},
+                                     biIsbn=${param.biIsbn},biAuthor=${param.biAuthor},biDtail=${param.biDtail},biYearStart=${param.biYearStart},biYearEnd=${param.biYearEnd},currentPage=(${currentPage}+1))}"> 
+                                	 다음<i class="fa fa-long-arrow-right"></i>
+                             	</a>
+                            </span>
+                         </div>
+                     </nav>
+                 </div>                
+             </div>
+         </div>
+         
+         
+     </div>
+    
+    
+
+    <!-- Start: Features -->
+        <!-- <section th:replace="fragments/library/features :: featuresFragments"></section> --> 
+    <!-- End: Features -->   
+       
+    
+</html>

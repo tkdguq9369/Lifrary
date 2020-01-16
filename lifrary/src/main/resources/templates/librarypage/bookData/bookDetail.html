@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<!-- 도서 상세페이지 -->
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/library/libraryDefault}">
+		
+  <th:block layout:fragment="libraryTitle">
+	 <title>도서상세</title>
+  </th:block>
+  
+  <th:block layout:fragment="customScript">
+	    <style>
+		 	.post-thumbnail img {			 		
+				height: 420px;
+				max-width: 400px;
+		 	}
+		 	@media (max-width: 991px){
+		 		.category-list img {
+		 		max-width: 100%; 
+		 		height: 300px;
+		 		}
+		 	}
+		 	.center-content {
+		 		margin: 10px 0 10px 0;
+		 	}
+	 	</style>
+	 	<script type="text/javascript" th:inline="javascript">  
+       $(document).ready(function(){  	
+    	   $('#holdBtn').click(function(){
+    		   var sid = [[${session.SID}]]
+    		   
+    		   if( sid == null ){
+    			   alert('도서를 예약하시려면 로그인을 해주세요');
+    			   location.replace('/lifrary/login');
+
+    		   }else{
+    			   
+    			   var bsCode =$('#bsCode').text();
+    			   console.log(bsCode);
+    			   
+    			   var request = $.ajax({
+   					url:"/holdBook",
+   					method: "POST",
+   					data : { 'sid':sid, 'bsCode':bsCode }, 
+   					dataType: "text"
+	  				});				 
+	  				request.done(function( data ) {
+	  					 if(data == 1){
+	  						alert('도서예약이 완료되었습니다. 당일 예약이므로 오늘 중 대출을 부탁드립니다.');
+	  						location.reload();
+	  					 }else if(data == 0){
+	  						alert('대출가능권수 초과로 인하여 도서예약이 불가합니다.'); 
+	  					 }else if(data == 2){
+	  						alert('현재 대출제한 상태로 인하여 도서예약이 불가합니다.'); 
+	  					 }else{
+	  						alert('도서예약이 불가합니다.'); 
+	  					 }
+	  				});				 
+	  				request.fail(function( jqXHR, textStatus ) {
+	  					alert( "Request failed: " + textStatus );
+	  				}); 				
+	   			   
+	   		   }
+     	   });
+    	}); // 처음 function끝
+    	    	
+    	</script>
+ 	</th:block>  
+  
+  
+    
+	<th:block layout:fragment="customContents">   
+		<section class="page-banner services-banner" th:fragment="bookBannerFragment">
+            <div class="container">
+                <div class="banner-header">
+                    <h2>도서 상세보기</h2>
+                    <span class="underline center"></span>
+                    <p class="lead">도서의 상세정보를 확인해보세요</p>
+                </div>
+                <div class="breadcrumb">
+                    <ul>
+                        <li><a th:href="@{/}">Home</a></li>
+                        <li>Books</li>
+                    </ul>
+                </div>
+                
+            </div>
+        </section> 
+        
+		<div id="primary" class="content-area">
+                <main id="main" class="site-main">
+                    <div class="booksmedia-detail-main">
+                        <div class="container">
+                            <div class="row">                        
+                            <div class="entry-content search-buttons align-middle text-center" style="margin: 50px 0 ">			
+									<a th:href="@{/lifrary/bookDataSearch}" class="btn btn-dark-gray">통합검색</a>
+									<a href="#" class="btn btn-dark-gray">신착도서</a>
+									<a href="#" class="btn btn-dark-gray">인기도서</a>
+									<a href="#" class="btn btn-dark-gray">사서추천도서</a>
+							</div>							
+							 <!-- Start: Search Section -->
+							 
+                              <!-- End: Search Section -->
+                             </div>
+                            <div class="booksmedia-detail-box" th:with="s=${stockDetail}">
+                            
+                            <div class="detailed-box">
+                                    <div class="col-xs-12 col-sm-5 col-md-3">
+                                        <div class="post-thumbnail">                       
+                                            <img th:src="${s.bookInformation.biImg}" alt="이미지를 찾을 수 없습니다" >
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-7 col-md-6">
+                                        <div class="post-center-content">
+                                            <h2 th:text="${s.bookInformation.biName}"></h2>
+                                            <br><br>
+                                            <p><strong>저자:</strong>&emsp;<span th:text="${s.bookInformation.biAuthor}"></span></p>
+                                            <p><strong>ISBN:</strong>&emsp;<span th:text="${s.bookInformation.biIsbn}"></span></p>
+                                            <p><strong>발행자:</strong>&emsp;<span th:text="${s.bookInformation.biPublisher}"></span></p>
+                                            <p><strong>발행년도:</strong>&emsp;<span th:text="${s.bookInformation.biYear}"></span></p>
+                                            <p><strong>총 페이지수:</strong>&emsp;<span th:text="|${s.bsTotalPage}p|"></span></p>
+                                            <p><strong>등록번호:</strong>&emsp;<span th:text="${s.bsCode}"></span></p>
+                                            <p><strong>청구기호:</strong>&emsp;<span th:text="${s.bsCallNum}"></span></p>
+                                            <br><br>
+                                            <div class="actions">
+                                                <ul>
+                                                    <li>
+                                                        <a href="#" target="_blank" data-toggle="blog-tags" data-placement="top" title="" data-original-title="Add To Cart">
+                                                            <!-- <i class="fa fa-shopping-cart"></i> -->
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" target="_blank" data-toggle="blog-tags" data-placement="top" title="" data-original-title="Like">
+                                                           <!--  <i class="fa fa-heart"></i> -->
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" target="_blank" data-toggle="blog-tags" data-placement="top" title="" data-original-title="Mail">
+                                                           <!--  <i class="fa fa-envelope"></i> -->
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" target="_blank" data-toggle="blog-tags" data-placement="top" title="" data-original-title="Search">
+                                                           <!--  <i class="fa fa-search"></i> -->
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" target="_blank" data-toggle="blog-tags" data-placement="top" title="" data-original-title="Print">
+                                                            <!-- <i class="fa fa-print"></i> -->
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#" target="_blank" data-toggle="blog-tags" data-placement="top" title="" data-original-title="Print">
+                                                           <!--  <i class="fa fa-share-alt"></i> -->
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-sm-12 col-md-3 ">
+                                        <div class="post-right-content">
+                                            <br>
+                                            <br>  
+                                            <br>                        
+                                            <a href="#." class="btn btn-dark-gray" type="button" id="holdBtn">당일 도서 예약</a> 
+                                            <br>
+                                            <a th:href="@{'http://www.aladin.co.kr/shop/book/wletslookViewer.aspx?ISBN='+${s.bookInformation.biIsbn}}" class="btn btn-dark-gray">도서 미리보기</a> 
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                
+                                <div class="clearfix"></div>
+                                <p th:with="s=${stockDetail}"><strong>책 상세설명:</strong> 
+                                	<span th:if="${s.bookInformation.biDtail ne null and s.bookInformation.biDtail ne ''}" th:text="${s.bookInformation.biDtail}"></span>
+                                	<span th:unless="${s.bookInformation.biDtail ne null and s.bookInformation.biDtail ne ''}"> &nbsp* 이 도서는 상세설명을 제공 하지 않습니다.</span>
+                                </p>
+
+                                <div class="table-tabs" id="responsiveTabs">
+                                   
+                                    <div class="tab-content">
+                                        <div id="sectionA" class="tab-pane fade in active">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="align-middle text-center">구분</th>
+                                                        <th class="align-middle text-center">청구기호</th>
+                                                        <th class="align-middle text-center">자료상태</th>
+                                                        <th class="align-middle text-center">반납예정일</th>
+                                                        <th class="align-middle text-center">예약</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="align-middle text-center" th:text="${s.bsCode}" id="bsCode"></td>
+                                                        <td class="align-middle text-center" th:text="${s.bsCallNum}"></td>
+                                                        <td class="align-middle text-center">
+                                                        	 <span th:if="${s.bsLendState eq 'O'}">대출가능</span>
+					      									 <span th:unless="${s.bsLendState eq 'O'}">대출불가</span>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                        	 <span th:text="${returnDate.blScheduleDate}"></span>			      
+                                                        
+                                                        </td>                 
+                                                        <td class="align-middle text-center">
+                                                        	 <span th:if="${s.bsLendState eq 'O'}">당일예약가능</span>
+					      									 <span th:unless="${s.bsLendState eq 'O'}">당일예약불가</span>
+                                                        </td>                                                                   
+                                                    </tr>   
+                                                </tbody>
+                                            </table>
+                                        </div>                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+		 
+
+        
+        
+         
+</th:block>
+</html>

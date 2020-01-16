@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="ksmart.pentagon.booklend.BookLendMapper">
+  
+	  <resultMap type="ksmart.pentagon.vo.BookLend" id="bookLend">
+	    <result column="bl_code" property="blCode"/>
+	    <result column="l_code" property="lCode"/>
+	    <result column="bl_id" property="blId"/>
+	    <result column="bs_code" property="bsCode"/>
+	    <result column="bi_isbn" property="biIsbn"/>
+	    <result column="bi_name" property="biName"/>
+	    <result column="bi_img" property="biImg"/>
+	    <result column="bl_lend_date" property="blLendDate"/>
+	    <result column="bl_extension_date" property="blExtensionDate"/>
+	    <result column="bl_schedule_date" property="blScheduleDate"/>
+	    <result column="bl_return_date" property="blReturnDate"/>
+	    <result column="bl_hold_date" property="blHoldDate"/>
+	    <result column="bl_overdue_days" property="blOverdueDays"/>
+	    <result column="u_number" property="uNumber"/>
+	    <result column="u_name" property="uName"/>
+	</resultMap>
+	<resultMap type="ksmart.pentagon.vo.BookInformation" id="bookInfo">
+	    <result column="bi_isbn" property="biIsbn"/>
+	    <result column="bi_name" property="biName"/>
+	    <result column="bi_year" property="biYear"/>
+	    <result column="bi_author" property="biAuthor"/>
+	    <result column="bi_publisher" property="biPublisher"/>
+	    <result column="bi_kdc" property="biKdc"/>
+	    <result column="bi_img" property="biImg"/>
+	</resultMap>
+	<resultMap type="ksmart.pentagon.vo.BookStock" id="bookStock">
+	    <result column="bs_code" property="bsCode"/>
+	    <result column="bi_isbn" property="biIsbn"/>
+	    <result column="bs_alias_mark" property="bsAliasMark"/>
+	    <result column="bs_writer_mark" property="bsWriterMark"/>
+	    <result column="bs_secondary_mark" property="bsSecondaryMark"/>
+	    <result column="bs_stock_state" property="bsStockState"/>
+	    <result column="bs_book_state" property="bsBookState"/>
+	    <result column="bs_lend_state" property="bsLendState"/>
+	    <result column="bs_book_state" property="bsBookState"/>
+	    <result column="u_number" property="uId"/>
+	    <collection property="bookInformation" resultMap="bookInfo"/>
+	    <collection property="bookLend" resultMap="bookLend"/>
+	</resultMap>
+	<resultMap type="ksmart.pentagon.vo.User" id="user">
+	    <result column="u_id" property="uId"/>
+	    <result column="u_name" property="uName"/>
+	    <result column="u_number" property="uNumber"/>
+	    <result column="u_overdue_day" property="uOverdueDay"/>
+	    <result column="ul_level" property="ulLevel"/>
+	    <result column="uas_code" property="uasCode"/>
+	    <result column="u_authority_date" property="uAuthorityDate"/>
+	    <result column="u_authority_days" property="uAuthorityDays"/>
+	    <result column="uas_lend_limit" property="uasLendLimit"/>
+	    <result column="u_lend_cnt" property="uLendCnt"/>
+	    <collection property="userLevel" resultMap="userLevel"/>
+	</resultMap>
+	<resultMap type="ksmart.pentagon.vo.UserLevel" id="userLevel">
+	    <result column="ul_name" property="ulName"/>
+	    <result column="ul_lend_num" property="ulLendNum"/>
+	    <result column="ul_lend_day" property="ulLendDay"/>
+	</resultMap>	
+	<select id="bookSearchList" resultMap="bookLend">
+		SELECT
+			 bl.bl_code
+			,bl.l_code
+			,bl.bl_id  
+			,bl.bs_code 
+			,bi.bi_isbn
+			,bi.bi_name
+			,bi.bi_img  
+			,bl.bl_lend_date
+			,bl.bl_extension_date
+			,bl.bl_schedule_date
+			,bl.bl_return_date
+			,bl.bl_overdue_days
+		FROM
+			(SELECT 
+				*
+				,DATEDIFF( bl.bl_return_date, bl.bl_schedule_date ) AS bl_overdue_days 
+			FROM  
+				book_lend AS bl) AS bl
+		INNER JOIN
+			book_stock AS bs
+		ON 
+			bl.bs_code = bs.bs_code
+		INNER JOIN
+			book_information AS bi
+		ON 
+			bs.bi_isbn = bi.bi_isbn
+		WHERE 
+			bl.bl_lend_date IS NOT NULL 
+		AND 
+			bl.l_code = #{libNum}
+		ORDER BY 
+			bl.bl_code  DESC					
+  	</select>
+  	<select id="bookLendCheck" parameterType="java.lang.String" resultType="java.lang.Integer">
+  		SELECT 
+			 COUNT(1) 
+		FROM
+			book_lend 
+		WHERE
+			bs_code = #{svBook}
+		AND 
+			l_code = #{libNum}		
+  	</select>
+  	<select id="bookInfo" parameterType="java.lang.String" resultMap="bookStock">
+		  SELECT 
+			 bs.bs_code
+			,bs.bi_isbn
+			,bs.bs_alias_mark
+			,bs.bs_writer_mark
+			,bs.bs_secondary_mark
+			,bs.bs_stock_state
+			,bs.bs_book_state
+			,bs.bs_lend_state
+			,bi.bi_name
+			,bi.bi_year
+			,bi.bi_author
+			,bi.bi_publisher
+			,bi.bi_kdc
+			,u.u_number
+			,bl.bl_code
+			,bl.bl_id 
+			,bl.bl_lend_date
+			,bl.bl_return_date 
+		FROM
+			book_stock AS bs
+		INNER JOIN 
+			book_information AS bi
+		ON 
+			bs.bi_isbn = bi.bi_isbn
+		INNER join
+			book_lend AS bl
+		ON 
+			bs.bs_code = bl.bs_code
+		INNER join
+			user AS u
+		ON 
+			bl.bl_id = u.u_id 			
+		WHERE 
+			bs.bs_code = #{svBook}
+		AND 
+			bs.l_code = #{libNum}	
+		ORDER BY 
+			bl.bl_code desc
+		LIMIT 0,1
+  	</select>
+  	<select id="bookInfoStock" parameterType="java.lang.String" resultMap="bookStock">
+		 SELECT
+			bs.bs_code
+			,bs.bi_isbn
+			,bs.bs_alias_mark
+			,bs.bs_writer_mark
+			,bs.bs_secondary_mark
+			,bs.bs_stock_state
+			,bs.bs_book_state
+			,bs.bs_lend_state
+			,bi.bi_name
+			,bi.bi_year
+			,bi.bi_author
+			,bi.bi_publisher
+			,bi.bi_kdc
+		from
+			book_stock AS bs
+		INNER JOIN
+			book_information AS bi
+		ON
+			bs.bi_isbn = bi.bi_isbn
+		WHERE
+			bs.bs_code = #{svBook}
+		AND
+			bs.l_code = #{libNum}
+  	</select>
+  	<select id="userInfo" parameterType="java.lang.String" resultMap="user">
+  		SELECT
+			 u.u_id
+			,u.u_name
+			,u.u_number
+			,u.u_overdue_day
+			,ul.ul_name
+			,ul.ul_lend_num
+			,ul.ul_lend_day
+			,uas.uas_lend_limit
+			,DATE_ADD(uah.uah_date, INTERVAL uas.uas_limit_date DAY) AS u_authority_date
+			,DATEDIFF( DATE_ADD(uah.uah_date, INTERVAL uas.uas_limit_date DAY) , NOW() ) AS u_authority_days
+			,(SELECT
+					COUNT(1)
+				FROM
+					book_lend AS bl
+				WHERE
+					bl.bl_return_date IS NULL
+				AND(
+					(bl.bl_lend_date IS NULL AND bl.bl_hold_date IS NOT NULL)
+					OR
+					bl.bl_lend_date IS NOT NULL)
+				AND 
+					bl.bl_id = u.u_id	) AS u_lend_cnt
+		FROM
+			user AS u
+		INNER JOIN
+			user_level AS ul
+		ON
+			u.ul_level = ul.ul_level 
+		INNER JOIN
+			user_authority_set AS uas
+		ON 
+			u.uas_code = uas.uas_code	
+		LEFT JOIN 
+			user_authority_history AS uah
+		ON 
+			u.u_id = uah.u_id
+		WHERE
+			u.u_number = #{svUser}
+		AND 
+			u.l_code = #{libNum}	
+		ORDER BY 
+			uah.uah_date DESC
+		LIMIT 0,1
+  	</select>
+  	<insert id="lendInsert" parameterType="ksmart.pentagon.vo.BookLend">
+	  	<selectKey keyProperty="blCode" resultType="java.lang.String" order="BEFORE">
+		  	SELECT 
+			CONCAT('bl-',DATE_FORMAT(CURDATE(), '%y%m%d'),
+				(IF(DATE_FORMAT(CURDATE(),'%y%m%d') > LEFT(SUBSTRING_INDEX(MAX(bl.bl_code), '-', -1),6) 
+				, '00001' 
+				,LPAD(RIGHT(MAX(bl.bl_code),5)+1,5,'0')))) AS blCode
+			FROM 
+				book_lend as bl
+		</selectKey>
+		INSERT INTO book_lend(
+			bl_code
+			,l_code
+			,u_id
+			,bl_id
+			,bs_code
+			,bl_lend_date
+			,bl_schedule_date
+		)VALUES (
+			#{blCode}
+			,#{lCode}
+			,#{uId}
+			,#{blId}
+			,#{bsCode}
+			,CURDATE() 
+			,DATE_ADD(CURDATE(), INTERVAL ${ulLendDay} DAY)
+		)
+	</insert>
+	<update id="stockUpdate">
+		UPDATE book_stock
+			SET
+				bs_lend_state= #{lendState}	
+			WHERE 
+				bs_code = #{bsCode}	
+	</update>
+	<update id="returnUpdate">
+		UPDATE book_lend
+			SET
+				bl_return_date= CURDATE()
+			WHERE 
+				bl_code = #{blCode}
+	</update>
+	<update id="extensionUpdate">
+		UPDATE book_lend
+			SET
+				bl_extension_date=CURDATE(),
+				bl_schedule_date= DATE_ADD(bl_schedule_date, INTERVAL 7 DAY) 
+			WHERE 
+				bl_code = #{blCode}
+	</update>
+	<update id="holdUpdate">
+		UPDATE book_lend
+		SET
+			u_id= #{saId},
+			bl_lend_date= CURDATE(),
+			bl_schedule_date= DATE_ADD(CURDATE(), INTERVAL ${ulLendDay} DAY)
+		WHERE 
+			bl_code = #{blCode}
+	</update>
+	<select id="holdSearchList" resultMap="bookLend">
+		SELECT
+			 bl.bl_code
+			,bl.l_code
+			,bl.bl_id  
+			,bl.bs_code 
+			,bi.bi_isbn
+			,bi.bi_name
+			,bi.bi_img 
+			,bl.bl_lend_date 
+			,bl.bl_return_date
+			,bl.bl_hold_date
+			,u.u_number
+			,u.u_name
+		FROM
+			book_lend AS bl
+		INNER JOIN
+			book_stock AS bs
+		ON 
+			bl.bs_code = bs.bs_code
+		INNER JOIN
+			book_information AS bi
+		ON 
+			bs.bi_isbn = bi.bi_isbn
+		INNER join
+			user AS u
+		on
+			bl.bl_id = u.u_id		
+		WHERE 
+			bl.bl_lend_date IS NULL
+		AND 
+			bl.l_code = #{libNum}	 
+		ORDER BY 
+			bl.bl_code  DESC		
+	</select>
+	<update id="holdDelete">
+		UPDATE book_lend
+			SET
+				bl_return_date = CURDATE()
+			WHERE 
+				bl_code = #{blCode}	
+	</update>
+	<select id="myLendListCnt" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM	  
+			book_lend AS bl
+		INNER JOIN
+			book_stock AS bs
+		ON 
+			bl.bs_code = bs.bs_code
+		INNER JOIN
+			book_information AS bi
+		ON 
+			bs.bi_isbn = bi.bi_isbn
+		WHERE
+			bl.bl_lend_date IS NOT NULL 
+		AND 
+			bl.l_code = #{libNum}
+		AND 
+			bl.bl_id = #{blId}	
+		<if test="biName != null and biName neq ''.toString()"> 
+			AND bi.bi_name Like CONCAT ('%',#{biName},'%')		
+		</if>
+		<if test="skDate != null and skDate neq ''.toString() and svDate != null and svDate neq ''.toString()">
+			<![CDATA[ 
+				AND #{skDate} >= #{svDate}
+			]]>	
+		</if>
+	</select>
+	<select id="myLendList" resultMap="bookLend" parameterType="java.util.HashMap">
+		SELECT
+			 bl.bl_code
+			,bl.bs_code 
+			,bi.bi_isbn
+			,bi.bi_name
+			,bi.bi_img  
+			,bl.bl_lend_date
+			,bl.bl_extension_date
+			,bl.bl_schedule_date
+			,bl.bl_return_date
+			,bl.bl_overdue_days
+		FROM
+			(SELECT 
+				*
+				,DATEDIFF( bl.bl_return_date, bl.bl_schedule_date ) AS bl_overdue_days 
+			FROM  
+				book_lend AS bl) AS bl
+		INNER JOIN
+			book_stock AS bs
+		ON 
+			bl.bs_code = bs.bs_code
+		INNER JOIN
+			book_information AS bi
+		ON 
+			bs.bi_isbn = bi.bi_isbn
+		WHERE
+			bl.bl_lend_date IS NOT NULL 
+		AND 
+			bl.l_code = #{libNum}
+		AND 
+			bl.bl_id = #{blId}	
+		<if test="biName != null and biName neq ''.toString()"> 
+			AND bi.bi_name Like CONCAT ('%',#{biName},'%')		
+		</if>
+		<if test="skDate != null and skDate neq ''.toString() and svDate != null and svDate neq ''.toString()">
+			<![CDATA[ 
+				AND #{skDate} >= #{svDate}
+			]]>	
+		</if>
+		<if test="startRow neq null and rowPerPage neq null"> 
+	            ORDER BY bl.bl_code  DESC
+	            LIMIT #{startRow},#{rowPerPage}
+        </if>
+	</select>
+	<select id="myHoldListCnt" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+		SELECT
+			COUNT(1)
+		FROM 	
+			book_lend AS bl
+		INNER JOIN
+			book_stock AS bs
+		ON 
+			bl.bs_code = bs.bs_code
+		INNER JOIN
+			book_information AS bi
+		ON 
+			bs.bi_isbn = bi.bi_isbn	
+		WHERE 
+			bl.bl_lend_date IS NULL
+		AND 
+			bl.l_code = #{libNum}
+		AND 
+			bl.bl_id = #{blId}
+		<if test="biName != null and biName neq ''.toString()"> 
+			AND bi.bi_name Like CONCAT ('%',#{biName},'%')		
+		</if>
+		<if test="skDate != null and skDate neq ''.toString() and svDate != null and svDate neq ''.toString()">
+			<![CDATA[ 
+				AND #{skDate} >= #{svDate}
+			]]>	
+		</if>		 	
+	</select>
+	<select id="myHoldList" resultMap="bookLend" parameterType="java.util.HashMap">
+		SELECT
+			 bl.bl_code
+			,bl.bl_id  
+			,bl.bs_code 
+			,bi.bi_isbn
+			,bi.bi_name
+			,bi.bi_img 
+			,bl.bl_lend_date 
+			,bl.bl_return_date
+			,bl.bl_hold_date
+		FROM 	
+			book_lend AS bl
+		INNER JOIN
+			book_stock AS bs
+		ON 
+			bl.bs_code = bs.bs_code
+		INNER JOIN
+			book_information AS bi
+		ON 
+			bs.bi_isbn = bi.bi_isbn	
+		WHERE 
+			bl.bl_lend_date IS NULL
+		AND 
+			bl.l_code = #{libNum}
+		AND 
+			bl.bl_id = #{blId}	 
+		<if test="biName != null and biName neq ''.toString()"> 
+			AND bi.bi_name Like CONCAT ('%',#{biName},'%')		
+		</if>
+		<if test="skDate != null and skDate neq ''.toString() and svDate != null and svDate neq ''.toString()">
+			<![CDATA[ 
+				AND #{skDate} >= #{svDate}
+			]]>	
+		</if>
+		<if test="startRow neq null and rowPerPage neq null"> 
+	            ORDER BY bl.bl_code  DESC
+	            LIMIT #{startRow},#{rowPerPage}
+        </if>		
+	</select>
+  </mapper>

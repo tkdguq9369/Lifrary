@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="ksmart.pentagon.bookcarry.BookCarryMapper">
+ 
+ <!--   BookInformation    --> 
+  	<resultMap type="ksmart.pentagon.vo.BookInformation" id="bookInfoResultMap">	         
+	         <result property="biIsbn" column="bi_isbn"/>	         
+	         <result property="biName" column="bi_name"/>
+	         <result property="biYear" column="bi_year"/>	         
+	         <result property="biAuthor" column="bi_author"/>
+	         <result property="biPublisher" column="bi_publisher"/>
+	         <result property="biKdc" column="bi_kdc"/>	         
+	         <result property="biDtail" column="bi_detail"/>
+	         <result property="biImg" column="bi_img"/>
+	         <result property="biDate" column="bi_date"/>	              
+	 </resultMap>
+	 
+ <!--   BookCarry    --> 	 
+  	 <resultMap type="ksmart.pentagon.vo.BookCarry" id="bookCarryResultMap">	         
+	         <result property="uid" column="u_id"/>
+	         <result property="lCode" column="l_code"/>
+	         <result property="biIsbn" column="bi_isbn"/>
+	         
+	         <result property="boCode" column="bo_code"/>	         
+	         <result property="boCompany" column="bo_company"/>
+	         <result property="boBookNum" column="bo_book_num"/>
+	         <result property="boPrice" column="bo_price"/>	         
+	         <result property="bosState" column="bo_state"/>
+	         <result property="boDate" column="bo_date"/>
+	         
+	         <result property="bpCode" column="bp_code"/>
+	         <result property="bpPrice" column="bp_price"/>
+	         <result property="bpBookNum" column="bp_book_num"/>
+	         <result property="bpAdditional" column="bp_additional"/>	         
+	         <result property="bpDate" column="bp_date"/>   
+	         
+	         <result property="bdnCode" column="bdn_code"/>
+	         <result property="bdnName" column="bdn_name"/>
+	         <result property="bdnAddr" column="bdn_addr"/>
+	         <result property="bdnTel" column="bdn_tel"/>	         
+	         <result property="bdnNum" column="bdn_num"/>
+	         <result property="bdnPersonal" column="bdn_personal"/>
+	         <result property="bdnSticker" column="bdn_sticker"/>
+	         <result property="bdnHonorAgree" column="bdn_honor_agree"/>	         
+	         <result property="bdnDate" column="bdn_date"/>          
+	         
+	         <collection property="bookInformation" resultMap="bookInfoResultMap" />	       	         
+	 </resultMap>
+
+ <!--   BookRequest    --> 	 
+	 <resultMap type="ksmart.pentagon.vo.BookRequest" id="bookRequestResultMap">	         
+	         <result property="brCode" column="br_code"/>
+	         <result property="uId" column="u_id"/>
+	         <result property="lCode" column="l_code"/>	         
+	         <result property="brTitle" column="br_title"/>
+	         <result property="brIsbn" column="br_isbn"/>
+	         <result property="brYear" column="br_year"/>	         
+	         <result property="brPrice" column="br_price"/>
+	         <result property="brAuthor" column="br_author"/>
+	         <result property="brPublisher" column="br_publisher"/>	         
+	         <result property="brOpinion" column="br_opinion"/>
+	         <result property="brProgress" column="br_progress"/>
+	         <result property="brCancelReason" column="br_cancel_reason"/>
+	         <result property="brDate" column="br_date"/>
+	         
+	         <collection property="user" resultMap="userResultMap"></collection>              
+	 </resultMap>	 
+	 
+ <!--   User    --> 	 
+   	 <resultMap type="ksmart.pentagon.vo.User" id="userResultMap">
+			<!-- db -->
+			<result property="uId" column="u_id"/>
+			<result property="uPw" column="u_pw"/>
+			<result property="uNumber" column="u_number"/>
+			<result property="uName" column="u_name"/>
+			<result property="uTel" column="u_tel"/>
+			<result property="uEmail" column="u_email"/>
+			<result property="uEmailAgree" column="u_email_agree"/>
+	 </resultMap>
+	 
+<!-- (어드민) 수서모든 삭제   -->
+	<!-- (어드민) 삭제 위하여 사서 pw체크하는 메서드  --> 
+	 <select id="checkPw" resultMap="userResultMap" parameterType="String">
+  		SELECT 
+			  * 
+		FROM 
+			  user
+		WHERE 
+			  u_id     = #{said}
+	 	and	  u_pw 	   = #{write}		 		    
+  	 </select>
+	 <delete id="deleteOrder" parameterType="String">
+	  	DELETE 
+	 	FROM  
+	 		 book_order	 	
+	 	WHERE 
+	 		 bo_code = #{boCode}				    
+	 </delete>
+	 <delete id="deletePurchase" parameterType="String">
+	  	DELETE 
+	 	FROM  
+	 		 book_purchase	 	
+	 	WHERE 
+	 		 bp_code = #{bpCode}				    
+	 </delete>
+	 <delete id="deleteDonation" parameterType="String">
+	  	DELETE 
+	 	FROM  
+	 		book_donation 	 	
+	 	WHERE 
+	 		bdn_code = #{bdnCode}			    
+	 </delete>
+	 
+	 
+<!-- (어드민) 수서 입력폼에서 사용하는 도서정보 가져오기 버튼 클릭시 도서정보 가져오는 메서드   -->		 
+	 <select id="getBookInfo" resultMap="bookInfoResultMap" parameterType="String">
+  			SELECT 
+				* 
+			FROM 
+				book_information
+			where
+				bi_isbn = #{biIsbn}	 		    
+  	 </select>
+
+
+<!-- (어드민) 희망도서 신청리스트 전부 가져오기   -->		 
+  	<select id="getRequestList" resultMap="bookRequestResultMap" >
+  			SELECT 
+				* 
+			FROM 
+				book_request
+			where 
+                l_code = #{lCode}
+  	</select>
+ 
+<!-- (어드민) 희망도서 신청리스트에서 선택한 1개의 상세 정보 가져오기   -->		
+  	<select id="getRequestDatail" resultMap="bookRequestResultMap" parameterType="String">
+  			SELECT 
+				* 
+			FROM 
+				book_request br inner join user u
+			on 
+				br.u_id = u.u_id
+			where 
+				br.br_code =#{brCode}
+  	</select>
+ <!-- (도서관) 희망도서 신청리스트에서 세션 id의 리스트 모두 가져오기   --> 
+ 	<select id="getMyRequestList" resultMap="bookRequestResultMap" parameterType="hashMap">
+  			SELECT 
+				* 
+			FROM 
+				book_request
+			where 
+                u_id = #{uid}
+        <if test="startRow neq null and rowPerPage neq null"> 
+	            ORDER BY br_code DESC
+	            LIMIT #{startRow},#{rowPerPage}
+        </if>	
+  	</select>
+ <!-- (도서관) 내 희망도서  갯수 구하기 / 페이징 위함 -->
+ <select id="getCountMyRequest" parameterType="String" resultType="java.lang.Integer">
+  			SELECT 
+				count(1) 
+			FROM 
+				book_request
+			where 
+                u_id = #{uid}
+</select>
+ 
+ 
+ <!-- (어드민) 희망도서 상태변경 메서드   -->
+    <update id="updateProgress" parameterType="String" >
+		UPDATE 
+			 book_request
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="brProgress neq null and brProgress neq ''.toString()">
+			 br_progress         = #{brProgress},
+			</if>
+			<if test="brCancelReason neq null and brCancelReason neq ''.toString()">
+			 br_cancel_reason    = #{brCancelReason}
+			</if>
+		</trim>
+		WHERE 
+			 br_code = #{brCode}
+    </update>
+  	  	
+<!-- (어드민) 주문도서리스트 전부 가져오기   -->	
+  	<select id="getOrderList" resultMap="bookCarryResultMap">
+			SELECT 
+				*
+										 
+			FROM 
+				book_order as bo INNER JOIN book_information as bi
+			ON 
+			    bo.bi_isbn = bi.bi_isbn
+			where 
+                bo.l_code = #{lCode}	
+  	
+  	</select>
+ <!-- (어드민) 주문도서 상태변경 -->
+  	 <update id="updateOrderState1" parameterType="String" >
+		UPDATE 
+			book_order
+		SET
+			bo_state      = '주문완료'
+		WHERE 
+			bo_code = #{boCode}
+    </update>
+    <update id="updateOrderState2" parameterType="String" >
+		UPDATE 
+			book_order
+		SET
+			bo_state      = '수령완료'
+		WHERE 
+			bo_code = #{boCode}
+    </update>
+  	
+ <!-- (어드민) 구매예정 도서리스트 전부 가져오기   -->	 	
+  	<select id="getPurchaseList" resultMap="bookCarryResultMap" >
+			SELECT 	
+				*
+			FROM 
+				book_purchase as bp INNER JOIN book_information as bi
+			ON 
+				bp.bi_isbn = bi.bi_isbn;  		
+  	
+  	</select>
+  	
+ <!-- (어드민) 기부신청자 리스트 전부 가져오기   -->	 	
+  	<select id="getDonationList" resultMap="bookCarryResultMap">
+			SELECT 
+				* 
+			FROM 
+				book_donation
+			where 
+                l_code = #{lCode}		
+  	
+  	</select>
+ <!-- (어드민) 기부신청자 스티커,명예전당 상태변경   -->  	
+  	<update id="updateStickerO" parameterType="String" >
+		UPDATE 
+			book_donation
+		SET
+			 bdn_sticker      = 'O'
+		WHERE 
+			 bdn_code = #{bdnCode}
+    </update>
+    <update id="updateStickerX" parameterType="String" >
+		UPDATE 
+			book_donation
+		SET
+			bdn_sticker      = 'X'
+		WHERE 
+			bdn_code = #{bdnCode}
+    </update>
+    <update id="updateHonorO" parameterType="String" >
+		UPDATE 
+			book_donation
+		SET
+			 bdn_honor_agree      = 'O'
+		WHERE 
+			 bdn_code = #{bdnCode}
+    </update>
+    <update id="updateHonorX" parameterType="String" >
+		UPDATE 
+			book_donation
+		SET
+			bdn_honor_agree      = 'X'
+		WHERE 
+			bdn_code = #{bdnCode}
+    </update>
+  	
+ <!-- (어드민) 주문도서 리스트에서 선택한 도서 1개의 상세 정보 가져오기(수정폼& 상세페이지 역할도 함)   --> 	
+  	<select id="getOrderUpdate" resultMap="bookCarryResultMap" parameterType="String">
+  		   SELECT 
+				*
+										 
+			FROM 
+				book_order as bo INNER JOIN book_information as bi
+			ON 
+			    bo.bi_isbn = bi.bi_isbn
+			where
+				bo_code=#{boCode}
+  	</select>
+  	
+ <!-- (어드민) 구매예정도서 리스트에서 선택한 도서 1개의 상세 정보 가져오기(수정폼& 상세페이지 역할도 함)   --> 	 	
+  	<select id="getPurchaseUpdate" resultMap="bookCarryResultMap" parameterType="String">
+  			SELECT 	
+				*
+			FROM 
+				book_purchase as bp INNER JOIN book_information as bi
+			ON bp.bi_isbn = bi.bi_isbn
+			where
+				bp_code=#{bpCode};
+  	</select>
+  	
+ <!-- (어드민) 도서기부 신청자 리스트에서 선택한 1개의 상세 정보 가져오기(수정폼& 상세페이지 역할도 함)   --> 
+  	<select id="getDonationUpdate" resultMap="bookCarryResultMap" parameterType="String">
+  			SELECT 
+				* 
+			FROM 
+				book_donation
+		    where
+				bdn_code=#{bdnCode};
+  	</select>
+  
+ <!-- (어드민) 도서기부 신청자 상세 수정 처리   --> 
+  	<update id="updateDonation" parameterType="ksmart.pentagon.vo.BookCarry" >
+		UPDATE 
+			book_donation
+		SET
+			 bdn_name       = #{bdnName}
+			,bdn_tel        = #{bdnTel}
+			,bdn_addr       = #{bdnAddr}
+			,bdn_num        = #{bdnNum}
+			,bdn_sticker    = #{bdnSticker}
+			,bdn_personal   = #{bdnPersonal}
+			,bdn_honor_agree= #{bdnHonorAgree}
+		WHERE 
+			 bdn_code = #{bdnCode};	
+	</update>
+	
+	
+ <!-- (어드민) 주문도서 상세 수정 처리 1  --> 	
+	<update id="updateOrder" parameterType="ksmart.pentagon.vo.BookCarry" >
+		
+	        UPDATE 
+				book_order
+			SET
+				 bo_company   = #{boCompany}
+				,bo_book_num  = #{boBookNum}
+				,bo_price     = #{boPrice}
+			WHERE 
+				 bi_isbn = #{biIsbn}
+	</update>
+	
+ <!-- (어드민) 구매예정도서 상세 수정 처리 1  --> 
+	<update id="updatePurchase" parameterType="ksmart.pentagon.vo.BookCarry" >
+		UPDATE 
+			book_purchase
+		SET
+			 bp_price      = #{bpPrice}
+			,bp_book_num   = #{bpBookNum}
+			,bp_additional = #{bpAdditional}
+		WHERE 
+			 bi_isbn = #{biIsbn}
+    </update>
+    
+ <!-- (어드민) 구매예정도서 상세 수정 처리 2  -->     
+    <update id="updateBookInformation" parameterType="ksmart.pentagon.vo.BookInformation" >
+		UPDATE 
+			book_information
+		SET
+			 bi_name      = #{biName}
+			,bi_author    = #{biAuthor}
+			,bi_publisher = #{biPublisher}
+			,bi_year      = #{biYear}
+		WHERE 
+			 bi_isbn = #{biIsbn}
+    </update>
+    
+<!-- (어드민) 수서(구매예정,주문) 추가 폼에서 도서정보가져오기 후 '도서정보' 테이블에 해당 정보 인서트 하기   -->    
+	<insert id="insertBookInfo" parameterType="ksmart.pentagon.vo.BookInformation">
+		INSERT INTO 
+			book_information
+            (bi_isbn, bi_name, bi_year, bi_author
+             , bi_publisher, bi_kdc, bi_detail, bi_img, bi_date)
+		VALUES 
+			(#{biIsbn}, #{biName}, #{biYear}, #{biAuthor}
+			, #{biPublisher}, #{biKdc}, #{biDtail}, #{biImg}, CURDATE())
+	 
+	</insert>
+	
+<!-- (어드민) 도서 기부 신청자 등록   -->  	
+	<insert id="insertDonation">
+	<selectKey keyProperty="bdnCode" resultType="String" order="BEFORE">
+ 		SELECT 
+		CONCAT('bdn-',DATE_FORMAT(CURDATE(), '%y%m%d'),
+			(IF(DATE_FORMAT(CURDATE(),'%y%m%d') > LEFT(SUBSTRING_INDEX(MAX(bdn.bdn_code), '-', -1),6) 
+			, '00001' 
+			,LPAD(RIGHT(MAX(bdn.bdn_code),5)+1,5,'0'))))
+		FROM 
+			book_donation AS bdn
+ 	</selectKey>		
+		INSERT INTO book_donation
+		(    bdn_code
+		   , l_code
+		   , u_id
+		   , bdn_name
+		   , bdn_addr
+		   , bdn_tel
+		   , bdn_num
+		   , bdn_personal
+		   , bdn_sticker
+		   , bdn_honor_agree
+		   , bdn_date)
+	VALUES (
+		     #{bdnCode}
+		   , #{lCode}
+		   , #{uid}
+		   , #{bdnName}
+		   , #{bdnAddr}
+		   , #{bdnTel}
+		   , #{bdnNum}
+		   , #{bdnPersonal}
+		   , #{bdnSticker}
+		   , #{bdnHonorAgree}
+		   , CURDATE()
+		 )
+	</insert>
+
+<!-- (도서관) 희망도서 신청 등록   -->  		
+	<insert id="insertRequest">
+	<selectKey keyProperty="brCode" resultType="String" order="BEFORE">
+ 		SELECT 
+		CONCAT('br-',DATE_FORMAT(CURDATE(), '%y%m%d'),
+			(IF(DATE_FORMAT(CURDATE(),'%y%m%d') > LEFT(SUBSTRING_INDEX(MAX(br.br_code), '-', -1),6) 
+			, '00001' 
+			,LPAD(RIGHT(MAX(br.br_code),5)+1,5,'0'))))
+		FROM 
+			book_request AS br
+ 	</selectKey>		
+		INSERT INTO book_request
+		(     br_code
+			, l_code
+			, u_id
+			, br_title
+			, br_isbn
+			, br_year
+			, br_price
+			, br_author
+			, br_publisher
+			, br_progress
+			, br_opinion
+			, br_cancel_reason
+			, br_date)
+		VALUES (
+		     #{brCode}
+		   , #{lCode}
+		   , #{uId}
+		   , #{brTitle}
+		   , #{brIsbn}
+		   , #{brYear}
+		   , #{brPrice}
+		   , #{brAuthor}
+		   , #{brPublisher}
+		   , '접수완료'
+		   , #{brOpinion}
+		   , #{brCancelReason}
+		   , CURDATE())
+
+	</insert>
+<!-- (어드민) 구매예정 도서 등록   -->  		
+	<insert id="insertPurchaseBookCarry">
+	<selectKey keyProperty="bpCode" resultType="String" order="BEFORE">
+ 		SELECT 
+		CONCAT('bp-',DATE_FORMAT(CURDATE(), '%y%m%d'),
+			(IF(DATE_FORMAT(CURDATE(),'%y%m%d') > LEFT(SUBSTRING_INDEX(MAX(bp.bp_code), '-', -1),6) 
+			, '00001' 
+			,LPAD(RIGHT(MAX(bp.bp_code),5)+1,5,'0'))))
+		FROM 
+			book_purchase AS bp
+ 	</selectKey>		
+		INSERT INTO book_purchase
+			( bp_code
+			, l_code
+			, u_id
+			, bi_isbn
+			, bp_price
+			, bp_book_num
+			, bp_additional
+			, bp_date)
+		VALUES (   #{bpCode}
+			   	 , #{lCode}
+			 	 , #{uid}
+			 	 , #{biIsbn}
+			 	 , #{bpPrice}
+			 	 , #{bpBookNum}
+				 , #{bpAdditional}
+			 	 , CURDATE())
+
+	</insert>
+	
+<!-- (어드민) 주문도서 등록   -->  		
+	<insert id="insertOrderBookCarry">
+	<selectKey keyProperty="boCode" resultType="String" order="BEFORE">
+ 		SELECT 
+		CONCAT('bo-',DATE_FORMAT(CURDATE(), '%y%m%d'),
+			(IF(DATE_FORMAT(CURDATE(),'%y%m%d') > LEFT(SUBSTRING_INDEX(MAX(bo.bo_code), '-', -1),6) 
+			, '00001' 
+			,LPAD(RIGHT(MAX(bo.bo_code),5)+1,5,'0'))))
+		FROM 
+			book_order AS bo
+ 	</selectKey>		
+		INSERT INTO book_order
+		    ( bo_code
+			, l_code
+			, u_id
+			, bi_isbn
+			, bo_company
+			, bo_book_num
+			, bo_price
+			, bo_state
+			, bo_date)
+		VALUES (
+			  #{boCode}
+			, #{lCode}
+			, #{uid}
+			, #{biIsbn}
+			, #{boCompany}
+			, #{boBookNum}
+			, #{boPrice}
+			, '주문완료'
+			, CURDATE())
+
+	</insert>
+	
+  		
+  </mapper>

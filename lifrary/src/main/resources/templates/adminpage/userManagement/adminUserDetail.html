@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" 
+	  layout:decorate="~{layout/admin/adminDefault}"
+	  class="default-style">
+	  
+<th:block layout:fragment="adminTitle">
+	<title>회원 상세보기</title>
+</th:block>
+	  
+	  <th:block layout:fragment="adminHeadAdd">
+	  <link rel="stylesheet" th:href="@{/adminStatic/vendor/css/pages/users.css}">
+ 	  </th:block>
+ 
+ 
+  <!-- Content -->
+         <th:block layout:fragment="adminContents">
+         	<div class="layout-content">
+         		<div class="container-fluid flex-grow-1 container-p-y" >
+         			<div th:with="ud=${userDetail}" class="media align-items-center py-3 mb-3">
+		              <div class="media-body ml-4" > 
+		                <h4 class="font-weight-bold mb-0" th:text="${ud.uNumber}"></h4>
+		                <div class="text-muted mb-2">회원 :
+		                	<span th:text="${ud.uId}"></span>
+		                </div>
+		                <a th:href="@{/admin/userSearchList}" class="btn btn-primary btn-sm">리스트로 이동</a>&nbsp;
+		              </div>
+		            </div>
+         		
+         		
+         		
+        <!-- 
+         			 <div th:with="ud=${userDetail}" class="media align-items-center py-3 mb-3">
+		              <div class="media-body ml-4" > 
+		               <h4 class="font-weight-bold py-3 mb-4">
+		              <span class="text-muted font-weight-light">Forms /</span> 관리자가보는 회원상세페이지
+		            </h4>
+
+		              </div>
+		            </div> -->
+		            <div class="card mb-4">
+		              <div class="card-body">
+		                <table th:with="ud=${userDetail}" class="table user-view-table m-0" > <!-- th:with="m = ${#}" -->
+		                  <tbody>
+		                    <tr>
+		                      <td>아이디:</td><td th:text="${ud.uId}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>회원등급:</td><td th:text="${ud.ulLevel}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>회원등급명:</td><td th:text="${ud.ulName}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>구분:</td><td th:text="${ud.uDivision}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>회원제한코드:</td><td th:text="${ud.uasCode}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>회원제한명:</td><td th:text="${ud.uasName}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>모바일회원:</td><td th:text="${ud.uNumber}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>이름:</td><td th:text="${ud.uName}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>생년월일:</td><td th:text="${ud.uBirth}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>주소:</td><td th:text="${ud.uAddr}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>연락처:</td><td th:text="${ud.uTel}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>이메일:</td><td th:text="${ud.uEmail}"></td>
+		                    </tr>
+		                    <tr>
+		                      <td>이메일수신동의:</td>
+		                      <td th:if = "${ud != null}">
+		                      	<span th:if="${ud.uEmailAgree eq 'O'}" th:text="동의" class="ion ion-md-checkmark text-primary"></span>
+		                      	<span th:unless = "${ud.uEmailAgree eq 'O'}"  th:text="비동의" class="ion ion-md-close text-danger"></span>
+		                      	&nbsp;
+		                      </td>
+		                    </tr>
+		                    <tr>
+		                      <td>임명장 수여 :</td>
+		                      <td th:if = "${ud != null}">
+		                      	<span th:if="${ud.uAppointment eq 'O'}" th:text="동의" class="ion ion-md-checkmark text-primary"></span>
+		                      	<span th:unless = "${ud.uAppointment eq 'O'}"  th:text="비동의" class="ion ion-md-close text-danger"></span>
+		                      	&nbsp;
+		                      </td>
+		                    </tr>
+		                    <tr>
+		                      <td>누적 연체일:</td><td th:text="${ud.uAuthorityDate}"></td>
+		                    </tr>
+		                    <!-- <tr>
+		                      <td>uAuthorityDate(남은 대출기간일):</td><td th:text="${ud.bsCarryRoute}"></td>
+		                    </tr> -->
+		                    <tr>
+		                      <td>대출제한:</td>
+		                      <td>
+		                      	 <span th:if="${ud.uasLendLimit}  == O" th:text="대출가능" class="badge badge-outline-success" ></span>
+	                			<span th:unless="${ud.uasLendLimit} == O" th:text="대출불가" class="badge badge-outline-danger"></span>		                      
+		                      </td>
+		                    </tr>
+		                    <tr>
+		                      <td>공공시설:</td>
+		                      <td>
+		                      	  <span th:if="${ud.uasFacilityLimit}  == O" th:text="사용가능" class="badge badge-outline-success" ></span>
+	                			<span th:unless="${ud.uasFacilityLimit} == O" th:text="사용불가" class="badge badge-outline-danger"></span>
+		                      </td>
+		                    </tr>
+		                    <tr>
+		                      <td>등록일자:</td><td th:text="${ud.uDate}"></td>
+		                    </tr>
+		                  </tbody>
+		                </table>
+		              </div>
+		              
+		              
+		            </div>
+         	
+    
+         		</div>
+         	</div>
+
+          </th:block>
+
+</html>

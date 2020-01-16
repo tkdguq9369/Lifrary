@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html 	xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/library/libraryDefault}">
+    <th:block layout:fragment="libraryTitle">
+		<title>나의 서재</title>
+    </th:block>   
+    
+    <th:block layout:fragment="customScript">
+    <script type="text/javascript">
+   	 $(document).ready(function(){
+   		 
+   		 //서재 카테고리리스트 
+   		 $('#studySet').click(function(){
+   			 
+   			$('#studySetModal').find('ul').html('');
+   			
+   			var request = $.ajax({
+   	   		  url: "/lifrary/studyCateList",
+   	   		  method: "POST",
+   	   		  dataType: "json"
+   	   		});
+   	   		 
+   	   		request.done(function( data ) {
+   	   			
+   	   			if(data.length > 0){
+				   	for(var i = 0; i<data.length; i++){
+				   		var cate = data[i];
+				   		
+				 		var ul = $('#studySetModal').find('ul');
+				   		ul.append('<li></li>');
+				   		var li = ul.children('li').eq(i);
+				   		li.text(cate.scName);
+				   		li.attr('value',cate.scCode); 
+				   	}
+   	   			}
+   	   			else{
+	   	   			var ul = $('#studySetModal').find('ul');
+			   		ul.append('<li></li>');
+			   		var li = ul.children('li')
+			   		li.text('등록된 카테고리가 없습니다');
+			   		li.css( "height", "80px" );
+			   		li.css( "text-align", "center" );	
+   	   			}
+   	   		});
+   	   		 
+   	   		request.fail(function( jqXHR, textStatus ) {
+   	   		  alert( '카테고리를 불러오는데 실패하였습니다' );
+   	   		});
+   		 });
+   		 
+   		//선택된 카테고리명 가져오기
+   		 $('#studySetModal').on('click','li',function(){
+   			 console.log('이벤트 실행');
+   			 var liValue = $(this).val();
+   			 var liText = $(this).text();
+   			$('#studySetModal').find('input').val(liText);
+   		 });
+   		
+   		//새로운 카테고리 등록
+   		
+   	
+	}); //document.ready
+    </script>
+ 	<style>
+ 	.category-filter{
+ 		background-image: none;
+ 	}
+ 	.category-filter h2{
+ 		color: #282828;
+ 	}
+ 	.category-list img {
+ 		max-width: 100%; 
+ 		height: 200px;
+ 	}
+ 	@media (max-width: 991px){
+ 		.category-list img {
+ 		max-width: 100%; 
+ 		height: 300px;
+ 		}
+ 	}
+ 	.center-content {
+ 		margin: 10px 0 10px 0;
+ 	}
+ 	.select-list{
+ 		display: block; 
+ 		position: inherit;
+ 		border-top: 3px solid #f4f4f4;
+ 		margin-top: 5px;
+ 	}
+ 	.col-sm-6{
+ 		margin-top: 5px;
+ 	}
+ 	</style>
+ 	</th:block>  
+    
+    <th:block layout:fragment="customContents">
+       <section class="page-banner services-banner">
+            <div class="container">
+                <div class="banner-header">
+                    <h2>MY STUDY</h2>
+                    <span class="underline center"></span>
+                    <p class="lead">자유롭게 도서를 정리하는 나만의 서재</p>
+                </div>
+                <div class="breadcrumb">
+                    <ul>
+                        <li><a>마이페이지</a></li>
+                        <li>나만의 서재</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <div id="content" class="site-content">
+            <div id="primary" class="content-area">
+                <main id="main" class="site-main">
+                    <div class="books-media-list">
+                        <div class="container">
+                            <div class="row">
+                                <!-- Start: Search Section -->
+                                <section class="category-filter">
+							           <div class="container">
+							           		<div class="center-content">
+								                 <div class="row">
+								                       <div class="col-md-6 col-md-offset-3">
+								                           <h2 class="section-title">MY STUDY</h2>
+								                           <span class="underline center"></span>
+								                           <p class="lead">나만의 기준으로 도서 정리</p>
+								                       </div>
+								                   	</div>
+								               </div>
+								               <div class="filter-buttons">
+								               <div class="filter btn" data-filter=".all">전체 도서</div>
+							                   <div class="filter btn" data-filter=".end">완독 도서</div>
+							                   <div class="filter btn" data-filter=".ing">진행도서</div>
+							                   <div class="filter btn" data-filter=".jam">꿀잼 도서</div>
+							                   <div class="filter btn" data-filter=".nojam">노잼 도서</div>
+							               </div>
+							           </div>
+							    </section>     
+                                <!-- End: Search Section -->
+                            </div>
+                            <div class="row">
+                                <div class="col-md-9 col-md-push-3">
+                                	 <div class="filter-options margin-list">
+                                        <div class="row">                                            
+                                            <div class="col-md-8 col-sm-8">
+                                                <div><strong>total: </strong>25</div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-4 pull-right">
+                                                <div >
+                                                	<strong>
+                                                		<i class="fa fa-cog">&nbsp;카테고리 설정</i>
+                                                		<a href="#studyInsertModal" data-toggle="modal">등록</a>
+                                                		<a id="studySet" href="#studySetModal" data-toggle="modal">수정</a>
+                                                	</strong>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                	 <section class="category-filter" style=" padding: 0px;">
+							            <div id="category-filter" >
+							                <ul class="category-list">
+							                    <li class="category-item all">
+							                        <figure>
+							                            <img src="/libraryStatic/images/studyPlus.png" alt="이미지 준비중" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>도서 추가</h4>
+							                                    <a href="#">추가하기 <i class="fa fa-long-arrow-right"></i></a>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                    <li class="category-item all end">
+							                        <figure>
+							                            <img src="http://image.aladin.co.kr/product/10393/53/cover/8901215047_1.jpg" alt="이미지 준비중" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>90일 완성 돈 버는 평생 습관</h4>
+							                                    <span class="author"><strong>Author:</strong>요코야마 미츠아키</span>
+							                                    <span class="author"><strong>ISBN:</strong>9788901215044</span>
+							                                    <a href="#">상세보기 <i class="fa fa-long-arrow-right"></i></a>
+							                                	<ol>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-pencil"></i>수정</a>
+							                                        </li>
+							                                        <li>
+							                                            <a href="#"> <i class="fa fa-times"></i>삭제</a>
+							                                        </li>
+							                                    </ol>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                    <li class="category-item all ing">
+							                        <figure>
+							                            <img src="http://image.aladin.co.kr/product/14844/15/cover/k772532455_1.jpg" alt="이미지 준비중" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>변하는 것과 변하지 않는 것</h4>
+							                                    <span class="author"><strong>Author:</strong>강민호</span>
+							                                    <span class="author"><strong>ISBN:</strong>9791196372101</span>
+							                                    <a href="#">상세보기 <i class="fa fa-long-arrow-right"></i></a>
+							                                	<ol>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-pencil"></i>수정</a>
+							                                        </li>
+							                                        <li>
+							                                            <a href="#"> <i class="fa fa-times"></i>삭제</a>
+							                                        </li>
+							                                    </ol>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                    <li class="category-item all ing">
+							                        <figure>
+							                            <img src="https://image.aladin.co.kr/product/15762/65/cover/8965746612_1.jpg" alt="New Releaase" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>해리 1 :공지영 장편소설</h4>
+							                                    <span class="author"><strong>Author:</strong>공지영</span>
+							                                    <span class="author"><strong>ISBN:</strong>9788965746614</span>
+							                                    <a href="#">상세보기 <i class="fa fa-long-arrow-right"></i></a>
+							                               		<ol>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-pencil"></i>수정</a>
+							                                        </li>
+							                                        <li>
+							                                            <a href="#"> <i class="fa fa-times"></i>삭제</a>
+							                                        </li>
+							                                    </ol>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                    <li class="category-item all jam end">
+							                        <figure>
+							                            <img src="http://image.aladin.co.kr/product/5007/78/cover/8983925493_1.jpg" alt="이미지 준비중" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>해리포터 :혼혈 왕자 4</h4>
+							                                    <span class="author"><strong>Author:</strong>J.K. 롤링</span>
+							                                    <span class="author"><strong>ISBN:</strong>9788983925497</span>
+							                                    <a href="#">상세보기 <i class="fa fa-long-arrow-right"></i></a>
+							                                	<ol>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-pencil"></i>수정</a>
+							                                        </li>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-times"></i>삭제</a>
+							                                        </li>
+							                                    </ol>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                    <li class="category-item all jam end">
+							                        <figure>
+							                            <img src="http://image.aladin.co.kr/product/5007/78/cover/8983925485_1.jpg" alt="New Releaase" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>해리포터 :혼혈 왕자 3</h4>
+							                                    <span class="author"><strong>Author:</strong>J.K. 롤링</span>
+							                                    <span class="author"><strong>ISBN:</strong>9788983925480</span>
+							                                    <a href="#">상세보기 <i class="fa fa-long-arrow-right"></i></a> 
+							                                	<ol>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-pencil"></i>수정</a>
+							                                        </li>
+							                                        <li>
+							                                            <a href="#"> <i class="fa fa-times"></i>삭제</a>
+							                                        </li>
+							                                    </ol>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                    <li class="category-item all jam end">
+							                        <figure>
+							                            <img src="https://bookthumb-phinf.pstatic.net/cover/001/795/00179544.jpg?type=m1&udate=20130412" alt="New Releaase" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>해리포터와 비밀의 방</h4>
+							                                    <span class="author"><strong>Author:</strong>조앤 K. 롤링</span>
+							                                    <span class="author"><strong>ISBN:</strong>9788983920706</span>
+							                                    <a href="#">상세보기 <i class="fa fa-long-arrow-right"></i></a>
+							                                	<ol>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-pencil"></i>수정</a>
+							                                        </li>
+							                                        <li>
+							                                            <a href="#"> <i class="fa fa-times"></i>삭제</a>
+							                                        </li>
+							                                    </ol>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                    <li class="category-item all nojam end">
+							                        <figure>
+							                            <img src="https://image.aladin.co.kr/product/16690/37/cover/k562534364_1.jpg" alt="New Releaase" />
+							                            <figcaption class="bg-orange">
+							                                <div class="info-block">
+							                                    <h4>연애 잘하고 싶은데 방법을 모르겠어</h4>
+							                                    <span class="author"><strong>Author:</strong>송창민</span>
+							                                    <span class="author"><strong>ISBN:</strong>9791196440329</span>
+							                                    <a href="#">상세보기 <i class="fa fa-long-arrow-right"></i></a>
+							                                	<ol>
+							                                        <li>
+							                                            <a href="#"><i class="fa fa-pencil"></i>수정</a>
+							                                        </li>
+							                                        <li>
+							                                            <a href="#"> <i class="fa fa-times"></i>삭제</a>
+							                                        </li>
+							                                    </ol>
+							                                </div>
+							                            </figcaption>
+							                        </figure>
+							                    </li>
+							                </ul>
+							                <div class="center-content">
+						                   		<nav class="navigation pagination text-center">
+			                                        <div class="nav-links">
+			                                            <span class="page-numbers current">1</span>
+			                                            
+			                                        </div>
+		                                    	</nav>
+							                </div>
+							                <div class="clearfix"></div>
+							            </div>
+        						</section>
+                                </div>
+                                <!-- 마이페이지 사이드메뉴  -->
+                                <div th:replace="fragments/library/myPageLeftMenu :: myPageLeftMenuFragment"></div>
+                                <!-- 마이페이지 사이드메뉴-->
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+        <div class="modal fade" id="studyInsertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">서재 카테고리 등록</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<div class="row">
+	                  <div class="col-md-12">
+	                  	<div class="col-sm-12">		
+                      	   <p>*최대 20글자까지 설정 가능합니다</p>
+                      	   <label for="keywords">카테고리명</label>
+	                       <input class="form-control" type="text" placeholder="카테고리명을 입력해주세요">
+	                  	</div>
+	                  </div>
+                 </div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-dark-gray" data-dismiss="modal" aria-label="Close">닫기</button>
+		      	<button type="button" id="insertBtn" class="btn btn-primary" >등록</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<div class="modal fade" id="studySetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		  <div class="modal-dialog">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		        <h4 class="modal-title" id="myModalLabel">서재 카테고리 설정</h4>
+		      </div>
+		      <div class="modal-body">
+		      	<div class="row">
+	                  <div class="col-md-12">
+	                  	<div class="col-sm-12">		
+                      	   <p>*최대 20글자까지 설정 가능합니다</p>
+	                       <input class="form-control" type="text" placeholder="카테고리명">
+	                  	</div>
+	                  </div>
+	                  <div class="col-md-12">
+	                  	<div class="col-sm-6">
+	                       <button type="button" id="updateBtn" class="btn btn-primary form-control">수정</button>
+	                  	</div>
+	                  	<div class="col-sm-6">
+	                       <button type="button" id="deleteBtn" class="btn btn-primary form-control">삭제</button>
+	                  	</div>
+                  	 </div>
+	                  <div class="col-md-12">
+	                  	<div class="col-sm-12">
+	                      	<ul class="select-list">
+		                    </ul>
+                      	</div>
+	                  </div>
+                 </div>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-dark-gray" data-dismiss="modal" aria-label="Close">닫기</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+    </th:block>
+</html>

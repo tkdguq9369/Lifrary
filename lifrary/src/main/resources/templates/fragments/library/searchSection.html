@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Start: Search Section -->
+        <section class="search-filters" th:fragment="searchSectionFragment">
+           <div class="row" style="margin: 50px 0">
+         	<div class="col-md-11 col-md-push-1">
+              <div class="container">
+                 <div class="filter-box" style="margin: 50px 0 ">
+                      <form id="searchForm" th:action="@{/lifrary/bookDataSearchList}" method="get">							    
+                        <div class="col-md-3 col-sm-6">
+                            <div class="form-group">
+                                <select name="bclCode" id="bclCode" class="form-control">
+                                    <option value="bcl001">단행본</option>
+                                    <option value="bcl002">연속간행물</option>
+                                    <option value="bcl003">비도서</option>                            
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <div class="form-group">
+                                <label class="sr-only" for="keywords">자료 검색</label>
+                                <input id="biName" name="biName" class="form-control" placeholder="자료 검색" type="text">
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-6">					                     
+                            <div class="form-group">
+                                <input id="searchBtn" class="form-control" type="button" value="검색">
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-6" style="margin-top: 5px">					                     
+                                <a th:href="@{/lifrary/bookDataSearchDetail}" class="btn btn-dark-gray">상세검색</a>			             
+                        </div>
+                        
+                    </form>
+                 </div>
+               </div>
+             </div>
+           </div>
+        </section>
+        <!-- End: Search Section -->
+</html>
