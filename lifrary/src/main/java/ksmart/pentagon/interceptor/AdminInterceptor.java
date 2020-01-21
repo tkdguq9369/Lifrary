@@ -56,7 +56,7 @@ public class AdminInterceptor implements HandlerInterceptor {
 			if(PF == null) { // PF가 null인 경우는 포트폴리오 보기버튼을 눌러 들어간것으로, PF가 세션에 없으므로 정상적으로 보여준다.
 				response.setContentType("text/html;charset=UTF-8");
 				PrintWriter out = response.getWriter();
-				out.println("<script>alert('잘못된 접근입니다'); location.href='/';</script>");
+				out.println("<script>alert('잘못된 접근입니다'); location.href='/intro';</script>");
 				out.flush();
 				return false;
 			}else {
