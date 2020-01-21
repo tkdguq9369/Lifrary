@@ -113,7 +113,7 @@ public class AdminController {
 		session.removeAttribute("SALBA");
 		session.removeAttribute("SALS");
 		session.removeAttribute("SALBS");
-
+		session.removeAttribute("PF");
 		return "redirect:/admin/login";
 	}
 

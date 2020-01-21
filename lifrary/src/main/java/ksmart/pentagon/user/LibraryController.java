@@ -102,8 +102,10 @@ public class LibraryController {
 		session.getAttribute("LIBNUM");
 
 		if (session.getAttribute("LIBNUM") == "000000") {
+			session.removeAttribute("PF");
 			return "redirect:/pentagon/index";
 		} else if (session.getAttribute("LIBNUM") == "111111") {
+			session.removeAttribute("PF");
 			return "redirect:/square/index";
 		} else {
 			return "redirect:/intro";
