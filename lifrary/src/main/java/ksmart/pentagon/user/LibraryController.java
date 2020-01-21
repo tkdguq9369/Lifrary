@@ -78,13 +78,13 @@ public class LibraryController {
 		session.setAttribute("SID", user.getuId());
 		session.setAttribute("SNAME", user.getuName());
 		session.setAttribute("SDIV", user.getuDivision());
-
+		
 		if (session.getAttribute("LIBNUM") == "000000") {
 			return "redirect:/pentagon/index";
 		} else if (session.getAttribute("LIBNUM") == "111111") {
 			return "redirect:/square/index";
 		} else {
-			return "redirect:/";
+			return "redirect:/pentagon/index"; // 버튼을 누르지 않았을 경우 로그인 성공시 그냥 이쪽으로 보내준다.
 		}
 	}
 
@@ -106,7 +106,7 @@ public class LibraryController {
 		} else if (session.getAttribute("LIBNUM") == "111111") {
 			return "redirect:/square/index";
 		} else {
-			return "redirect:/";
+			return "redirect:/intro";
 		}
 	}
 

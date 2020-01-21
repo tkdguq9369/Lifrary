@@ -30,14 +30,15 @@ public class LayoutController {
 	private ProgramService programService;
 
 	@GetMapping("/")
-	public String portfolio() {
-
+	public String portfolio(HttpSession session) {
+		session.setAttribute("PF", "portfolio");
 		return "portfolio";
 	}
 	
 
 	@GetMapping("/intro")
-	public String intro() {
+	public String intro(HttpSession session) {
+		session.removeAttribute("PF");
 		return "intro";
 	}
 	

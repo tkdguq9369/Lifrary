@@ -54,6 +54,7 @@ public class AdminController {
 	@GetMapping("/admin/login")
 	public String adminLoginCheck(HttpSession session) {
 		// library => admin 로그인 페이지로 이동시, session에 값이 있는경우 remove해준다.
+		session.removeAttribute("PF");
 		if (session.getAttribute("SID") != null) {
 			session.removeAttribute("SID");
 			session.removeAttribute("SDIV");
